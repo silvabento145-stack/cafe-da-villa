@@ -1,58 +1,72 @@
 <!DOCTYPE html>
-<html lang="pt"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Café da Villa</title><style>
-*{box-sizing:border-box;font-family:Arial}body{margin:0;background:#fff8f0}
-header{background:#1a1a1a;color:#fff;padding:15px;display:flex;justify-content:space-between;align-items:center}
-header b{font-size:22px;color:#ffcc00}.card{background:#fff;margin:12px;padding:12px;border-radius:12px;box-shadow:0 2px 8px #0001}
-button{background:#e63946;color:#fff;border:0;padding:10px 16px;border-radius:8px;font-weight:bold;cursor:pointer;width:100%}
-input,select{width:100%;padding:10px;margin:5px 0;border:1px solid #ddd;border-radius:8px}
-.wa{position:fixed;bottom:20px;right:20px;background:#25D366;color:#fff;width:60px;height:60px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:30px;text-decoration:none;box-shadow:0 4px 12px #0003;z-index:99}
-/* CORRENTE AZUL TRANSPARENTE */
-#proc{position:fixed;inset:0;background:rgba(0,120,255,.15);backdrop-filter:blur(3px);display:none;align-items:center;justify-content:center;flex-direction:column;z-index:999}
-.chain{font-size:50px;animation:spin 1s infinite;display:flex;gap:5px}
-.chain span{color:rgba(0,140,255,.7);text-shadow:0 0 12px #0090ff}
-@keyframes spin{0%{transform:rotate(0)}100%{transform:rotate(360deg)}}
-#proc p{font-weight:bold;color:#0055aa;background:#fff;padding:8px 14px;border-radius:20px}
-</style></head><body>
-<header><b id="nomeLoja">🍕 Café da Villa</b><span id="horaLoja">Aberto</span></header>
-<div id="proc"><div class="chain"><span>🔗</span><span>🔗</span><span>🔗</span></div><p id="procTxt">A processar...</p></div>
-<div style="padding:0 4px"><h3 style="margin:12px">Nosso Menu</h3><div id="menu"></div>
-<div class="card"><h3>Teu Pedido</h3><div id="carrinho">Vazio</div>
-<input id="nome" placeholder="Teu nome"><input id="tel" placeholder="Teu telefone">
-<select id="bairro"><option value="">Escolhe o bairro</option></select>
-<select id="pag"><option>Multicaixa Express</option><option>Unitel Money</option><option>PayPay</option><option>Transferência Bancária</option></select>
-<p>Taxa: <b id="taxa">0 Kz</b> | Total: <b id="total">0 Kz</b><br>Pagás agora (metade): <b id="metade" style="color:green">0 Kz</b> | Resto na entrega: <b id="resto">0 Kz</b></p>
-<label>Comprovativo da metade (foto)</label><input type="file">
-<button onclick="fazerPedido()">FAZER PEDIDO</button></div></div>
-<a class="wa" id="waBtn" href="https://wa.me/244942788931" target="_blank">💬</a>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Café da Villa - Pizzaria</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
+body{background:#fff8f0;color:#222}
+header{background:#b91c1c;color:#fff;padding:20px;text-align:center}
+header h1{font-size:28px} header p{opacity:.9}
+nav{background:#111;color:#fff;display:flex;justify-content:center;gap:15px;padding:12px}
+nav a{color:#fff;text-decoration:none;font-weight:bold}
+.container{max-width:900px;margin:auto;padding:15px}
+.card{background:#fff;border-radius:15px;padding:15px;margin-bottom:15px;box-shadow:0 2px 10px #0001;display:flex;gap:12px;align-items:center}
+.card img{width:90px;height:90px;object-fit:cover;border-radius:12px;background:#eee}
+.card h3{font-size:18px} .card p{font-size:13px;color:#666}
+.price{font-weight:bold;color:#b91c1c;font-size:18px;margin:5px 0}
+button{background:#b91c1c;color:#fff;border:0;padding:10px 16px;border-radius:10px;font-weight:bold;cursor:pointer}
+button.green{background:#16a34a}
+input,textarea,select{width:100%;padding:12px;margin:6px 0;border:1px solid #ddd;border-radius:10px}
+.cart{position:fixed;bottom:15px;left:15px;right:15px;background:#111;color:#fff;padding:14px;border-radius:15px;display:flex;justify-content:space-between;align-items:center}
+.hidden{display:none}
+.admin{background:#fff;padding:15px;border-radius:15px;margin-top:15px}
+</style>
+</head>
+<body>
+<header><h1>🍕 Café da Villa</h1><p>Pizzaria • Luanda • Entrega Rápida</p></header>
+<nav><a href="#" onclick="show('loja')">Loja</a><a href="#" onclick="show('adminLogin')">Admin</a></nav>
+<div class="container" id="loja">
+<h2 style="margin:10px 0">Nosso Menu</h2>
+<div id="produtos"></div>
+</div>
+<div class="container hidden" id="adminLogin">
+<h2>Área Admin</h2><p>Senha: <b>1234</b></p>
+<input id="senha" type="password" placeholder="Senha do Admin">
+<button onclick="entrar()">Entrar</button>
+</div>
+<div class="container hidden" id="admin">
+<div class="admin">
+<h2>Adicionar Pizza / Produto</h2>
+<input id="nome" placeholder="Nome ex: Pizza Frango">
+<input id="preco" type="number" placeholder="Preço ex: 8000">
+<input id="desc" placeholder="Descrição">
+<input id="foto" placeholder="Link da foto (opcional)">
+<button class="green" onclick="addProduto()">Adicionar Produto</button>
+<button onclick="sair()">Sair do Admin</button>
+</div>
+</div>
+<div class="cart"><span id="cartInfo">🛒 Carrinho: 0 itens • 0 Kz</span><button class="green" onclick="finalizar()">Pedir no WhatsApp</button></div>
 <script>
-let pizzas=[{n:"Frango",p:9000},{n:"Mista",p:8500},{n:"Quatro Queijos",p:10000},{n:"Vegetariana",p:7500},{n:"Pepperoni",p:9500},{n:"Marisco",p:12000}];
-let bairros=JSON.parse(localStorage.getItem("bairros")||'[{"n":"Villa / Viana","t":1000},{"n":"Kilamba","t":2000},{"n":"Cazenga","t":1500}]');
-let config=JSON.parse(localStorage.getItem("config")||'{"nome":"🍕 Café da Villa","wa":"244942788931","email":"contato@cafédavilla.com"}');
-document.getElementById("nomeLoja").innerText=config.nome;
-document.getElementById("waBtn").href="https://wa.me/"+config.wa;
-let cart=[];
+let produtos = JSON.parse(localStorage.getItem('villa_produtos') || 'null') || [
+{nome:'Pizza Margherita',preco:7500,desc:'Molho de tomate, queijo e manjericão',foto:'https://images.unsplash.com/photo-1574071318508-1cdbab80d002?w=400'},
+{nome:'Pizza Frango',preco:9000,desc:'Frango, queijo, milho e orégano',foto:'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=400'},
+{nome:'Pizza Calabresa',preco:8500,desc:'Calabresa, cebola e queijo',foto:'https://images.unsplash.com/photo-1628840042765-356cda07504e?w=400'}
+];
+let carrinho=[];
 function render(){
- document.getElementById("menu").innerHTML=pizzas.map((x,i)=>`<div class="card"><b>${x.n}</b> - ${x.p} Kz <button onclick="add(${i})">Adicionar +</button></div>`).join("");
- document.getElementById("bairro").innerHTML='<option value="">Escolhe o bairro</option>'+bairros.map((b,i)=>`<option value="${i}">${b.n} - ${b.t} Kz</option>`).join("");
- let sub=cart.reduce((a,c)=>a+c.p,0); let taxa=bairros[document.getElementById("bairro").value]?.t||0; let tot=sub+taxa;
- document.getElementById("carrinho").innerHTML=cart.length?cart.map(c=>c.n+" - "+c.p+" Kz").join("<br>"):"Vazio";
- document.getElementById("taxa").innerText=taxa+" Kz"; document.getElementById("total").innerText=tot+" Kz";
- document.getElementById("metade").innerText=Math.ceil(tot/2)+" Kz"; document.getElementById("resto").innerText=Math.floor(tot/2)+" Kz";
+document.getElementById('produtos').innerHTML = produtos.map((p,i)=>`
+<div class="card"><img src="${p.foto||'https://via.placeholder.com/90'}"><div style="flex:1"><h3>${p.nome}</h3><p>${p.desc}</p><div class="price">${p.preco} Kz</div><button onclick="addCarrinho(${i})">Adicionar +</button></div></div>`).join('');
 }
-function add(i){cart.push(pizzas[i]);render()}
-document.getElementById("bairro").onchange=render;
-function mostrarProc(txt){document.getElementById("procTxt").innerText=txt;document.getElementById("proc").style.display="flex"}
-function fazerPedido(){
- if(!cart.length) return alert("Escolhe uma pizza!");
- mostrarProc("🔗 A processar o teu pedido...");
- setTimeout(()=>{mostrarProc("🔗 A verificar pagamento...")},1200);
- setTimeout(()=>{
-  let pedidos=JSON.parse(localStorage.getItem("pedidos")||"[]");
-  pedidos.push({nome:document.getElementById("nome").value||"Cliente",total:document.getElementById("total").innerText,items:cart.map(c=>c.n).join(", "),status:"pendente",data:new Date().toLocaleString()});
-  localStorage.setItem("pedidos",JSON.stringify(pedidos));
-  document.getElementById("proc").style.display="none"; cart=[]; render(); alert("✅ Pedido enviado! Paga a metade e envia o comprovativo no WhatsApp.");
- },2500);
-}
+function addCarrinho(i){carrinho.push(produtos[i]); updateCart();}
+function updateCart(){let total=carrinho.reduce((s,p)=>s+p.preco,0); document.getElementById('cartInfo').innerText=`🛒 Carrinho: ${carrinho.length} itens • ${total} Kz`;}
+function finalizar(){if(!carrinho.length) return alert('Carrinho vazio'); let msg='Olá Café da Villa! Quero pedir:%0A'; carrinho.forEach(p=>msg+=`- ${p.nome} - ${p.preco} Kz%0A`); let total=carrinho.reduce((s,p)=>s+p.preco,0); msg+=`Total: ${total} Kz`; window.open('https://wa.me/244923000000?text='+msg,'_blank');}
+function show(id){['loja','adminLogin','admin'].forEach(x=>document.getElementById(x).classList.add('hidden')); document.getElementById(id).classList.remove('hidden');}
+function entrar(){if(document.getElementById('senha').value=='1234'){show('admin')}else alert('Senha errada');}
+function sair(){show('loja')}
+function addProduto(){let n=document.getElementById('nome').value, pr=parseInt(document.getElementById('preco').value), d=document.getElementById('desc').value, f=document.getElementById('foto').value; if(!n||!pr) return alert('Falta nome e preço'); produtos.push({nome:n,preco:pr,desc:d,foto:f}); localStorage.setItem('villa_produtos',JSON.stringify(produtos)); render(); alert('Adicionado!'); show('loja');}
 render();
-</script></body></html>
+</script>
+</body>
+</html>
