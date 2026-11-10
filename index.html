@@ -3,29 +3,29 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Café da Villa - Pizzaria</title>
+<title>Café da Villa</title>
 <style>
-*{box-sizing:border-box} body{font-family:Arial,sans-serif;margin:0;background:#fff5f0;color:#222}
+*{box-sizing:border-box} body{font-family:Arial,sans-serif;margin:0;background:#fff5f0}
 header{background:#c0392b;color:#fff;padding:15px;text-align:center;position:sticky;top:0;z-index:10}
-header h1{margin:0;font-size:26px} header p{margin:5px 0}
-.hero{text-align:center;padding:20px 15px;background:#fff}
-.hero h2{font-size:28px;margin:5px;color:#c0392b} .hero p{color:#666;margin:0}
+header h1{margin:0} .hero{text-align:center;padding:15px;background:#fff}
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:12px;padding-bottom:90px}
 .card{background:#fff;border-radius:12px;padding:10px;box-shadow:0 2px 8px #0001;text-align:center}
 .card img{width:100%;height:140px;object-fit:cover;border-radius:10px}
-.card h3{margin:8px 0 2px;font-size:16px} .card p{font-size:13px;color:#666;margin:0}
-.price{color:#e67e22;font-weight:bold;font-size:18px;margin:5px 0}
-button{background:#e67e22;color:#fff;border:0;padding:11px 15px;border-radius:20px;font-weight:bold;cursor:pointer;width:100%;margin-top:5px}
+.price{color:#e67e22;font-weight:bold;font-size:18px}
+button{background:#e67e22;color:#fff;border:0;padding:11px;border-radius:20px;font-weight:bold;cursor:pointer;width:100%;margin-top:5px}
 button.sec{background:#333} button.del{background:#e74c3c;width:auto;padding:6px 10px;font-size:12px} button.edit{background:#f39c12;width:auto;padding:6px 10px;font-size:12px}
-.cart{position:fixed;bottom:0;left:0;right:0;background:#111;color:#fff;padding:14px;text-align:center;cursor:pointer;font-weight:bold;z-index:15}
+.cart{position:fixed;bottom:0;left:0;right:0;background:#111;color:#fff;padding:14px;text-align:center;font-weight:bold}
 .modal{position:fixed;inset:0;background:#000a;display:none;align-items:flex-end;justify-content:center;z-index:20}
 .modal.open{display:flex} .box{background:#fff;width:100%;max-width:520px;max-height:92vh;overflow:auto;border-radius:20px 20px 0 0;padding:20px}
-.opt{display:flex;justify-content:space-between;align-items:center;background:#f8f8f8;padding:10px;border-radius:10px;margin:5px 0;cursor:pointer}
+.opt{display:flex;justify-content:space-between;background:#f8f8f8;padding:10px;border-radius:10px;margin:5px 0}
 .opt.sel{background:#ffe8d6;border:2px solid #e67e22}
 input{width:100%;padding:10px;margin:5px 0;border:1px solid #ddd;border-radius:8px}
-label{font-weight:bold;font-size:13px;display:block;margin-top:10px} .admin-sec{background:#fff3e0;padding:10px;border-radius:10px;margin:10px 0}
-.prod-foto-preview{width:100%;border-radius:10px;display:none;margin-top:5px}
-.item-admin{display:flex;justify-content:space-between;align-items:center;background:#fff;padding:8px;border-radius:8px;margin:4px 0;font-size:14px}
+label{font-weight:bold;font-size:13px;display:block;margin-top:10px}
+.admin-sec{background:#fff3e0;padding:10px;border-radius:10px;margin:10px 0}
+.item-admin{display:flex;justify-content:space-between;align-items:center;background:#fff;padding:8px;border-radius:8px;margin:4px 0}
+.foto-box{border:2px dashed #e67e22;border-radius:12px;padding:10px;text-align:center;background:#fff8f0}
+.foto-box img{width:100%;border-radius:10px;display:none}
+.btn-foto{background:#2ecc71 !important} .btn-remover{background:#e74c3c !important}
 </style>
 </head>
 <body>
@@ -34,107 +34,95 @@ label{font-weight:bold;font-size:13px;display:block;margin-top:10px} .admin-sec{
 <div id="menu" class="grid"></div>
 <div class="cart" onclick="finalizar()">🛒 Ver Carrinho • <span id="totalCart">0 Kz</span></div>
 
-<div id="modalProd" class="modal"><div class="box">
-<button onclick="fechar()" style="background:#ddd;color:#000">X Fechar</button>
-<div id="mFoto"></div><h2 id="mNome"></h2><p id="mDesc"></p>
-<label>TAMANHO</label><div id="mTamanhos"></div>
-<label>🥤 BEBIDAS</label><div id="mBebidas"></div>
-<label>🍟 ACOMPANHAMENTOS</label><div id="mAcomp"></div>
-<label>🧀 EXTRAS</label><div id="mExtras"></div>
-<h3>Total: <span id="mTotal"></span></h3><button onclick="addCarrinho()">Adicionar ao Carrinho</button>
-</div></div>
+<div id="modalProd" class="modal"><div class="box"><button onclick="fechar()" style="background:#ddd;color:#000">X Fechar</button><div id="mFoto"></div><h2 id="mNome"></h2><p id="mDesc"></p><label>TAMANHO</label><div id="mTamanhos"></div><label>🥤 BEBIDAS</label><div id="mBebidas"></div><label>🍟 ACOMPANHAMENTOS</label><div id="mAcomp"></div><label>🧀 EXTRAS</label><div id="mExtras"></div><h3>Total: <span id="mTotal"></span></h3><button onclick="addCarrinho()">Adicionar ao Carrinho</button></div></div>
 
 <div id="modalAdmin" class="modal"><div class="box">
 <h2>Admin Café da Villa</h2>
-<div id="loginAdmin"><input id="senha" placeholder="Senha: 1234" type="password"><button onclick="login()">Entrar</button></div>
+<div id="loginAdmin"><input id="senha" type="password" placeholder="Senha: 1234"><button onclick="login()">Entrar</button></div>
 <div id="painelAdmin" style="display:none">
 <h3 id="tituloForm">➕ Adicionar Produto</h3>
 <input id="pNome" placeholder="Nome ex: Pizza de Chouriço">
-<input id="pPreco" type="number" placeholder="Preço base ex: 5000">
+<input id="pPreco" type="number" placeholder="Preço ex: 5000">
 <input id="pDesc" placeholder="Ingredientes">
-<label>📸 FOTO - Tirar Foto ou Escolher da Galeria</label>
-<input id="pFotoFile" type="file" accept="image/*">
-<input id="pFoto" placeholder="Ou cola link da foto aqui">
-<img id="previewFoto" class="prod-foto-preview">
-<p id="fotoInfo" style="font-size:12px;color:green"></p>
-<label>Preço Pequena (+ Kz)</label><input id="tPeq" type="number" value="0">
-<label>Preço Média (+ Kz)</label><input id="tMed" type="number" value="4000">
-<label>Preço Grande (+ Kz)</label><input id="tGra" type="number" value="7000">
+
+<!-- AQUI ESTÁ O TROCAR FOTO - BEM VISÍVEL -->
+<label>📸 FOTO DO PRODUTO</label>
+<div class="foto-box">
+<img id="previewFoto">
+<p id="fotoInfo" style="font-size:13px;color:#666">Nenhuma foto ainda. Clica em Trocar Foto abaixo.</p>
+<input id="pFotoFile" type="file" accept="image/*" style="display:none">
+<button type="button" class="btn-foto" onclick="document.getElementById('pFotoFile').click()">📸 TROCAR FOTO / TIRAR FOTO</button>
+<button type="button" class="btn-remover" onclick="removerFoto()">🗑️ REMOVER FOTO ATUAL</button>
+</div>
+<input id="pFoto" type="hidden">
+
+<label>Preço Pequena</label><input id="tPeq" type="number" value="0">
+<label>Preço Média</label><input id="tMed" type="number" value="4000">
+<label>Preço Grande</label><input id="tGra" type="number" value="7000">
 <button id="btnSalvar" onclick="salvarProduto()">✅ Salvar Produto</button>
 <button id="btnCancelarEdicao" onclick="cancelarEdicao()" style="background:#999;display:none">Cancelar Edição</button>
+
 <h3>📋 Produtos Atuais</h3><div id="listaProdutos"></div>
-<div class="admin-sec"><h3>🥤 Refrigerantes</h3><input id="bNome" placeholder="Ex: Coca-Cola"><input id="bPreco" type="number" placeholder="700"><button onclick="salvarBebida()">Adicionar</button><div id="listaBebidas"></div></div>
-<div class="admin-sec"><h3>🍟 Acompanhamentos</h3><input id="aNome" placeholder="Ex: Batata Frita"><input id="aPreco" type="number" placeholder="1000"><button onclick="salvarAcomp()">Adicionar</button><div id="listaAcomp"></div></div>
-<div class="admin-sec"><h3>🧀 Extras</h3><input id="eNome" placeholder="Ex: Queijo Extra"><input id="ePreco" type="number" placeholder="2000"><button onclick="salvarExtra()">Adicionar</button><div id="listaExtras"></div></div>
+<div class="admin-sec"><h3>🥤 Refrigerantes</h3><input id="bNome" placeholder="Coca-Cola"><input id="bPreco" type="number" placeholder="700"><button onclick="salvarBebida()">Adicionar</button><div id="listaBebidas"></div></div>
+<div class="admin-sec"><h3>🍟 Acompanhamentos</h3><input id="aNome" placeholder="Batata Frita"><input id="aPreco" type="number" placeholder="1000"><button onclick="salvarAcomp()">Adicionar</button><div id="listaAcomp"></div></div>
+<div class="admin-sec"><h3>🧀 Extras</h3><input id="eNome" placeholder="Queijo Extra"><input id="ePreco" type="number" placeholder="2000"><button onclick="salvarExtra()">Adicionar</button><div id="listaExtras"></div></div>
 <button class="sec" onclick="fechar()">Fechar Admin</button>
 </div></div></div>
 
 <script>
-let produtos = JSON.parse(localStorage.getItem('cafe_produtos')) || [
-{nome:'Pizza de Chouriço',preco:5000,foto:'',desc:'Chouriço, mozzarella, tomate, azeitonas, orégãos',tam:{peq:0,med:4000,gra:7000}},
-{nome:'Pizza Margherita',preco:7500,foto:'',desc:'Molho, mozzarella, tomate',tam:{peq:0,med:4000,gra:7000}},
-{nome:'Pizza Frango',preco:9000,foto:'',desc:'Frango, milho, mozzarella',tam:{peq:0,med:4000,gra:7000}}
-];
-let bebidas = JSON.parse(localStorage.getItem('cafe_bebidas')) || [{nome:'Coca-Cola',preco:700},{nome:'Fanta',preco:700}];
+let produtos = JSON.parse(localStorage.getItem('cafe_produtos')) || [{nome:'Pizza de Chouriço',preco:5000,foto:'',desc:'Chouriço, mozzarella, tomate, azeitonas',tam:{peq:0,med:4000,gra:7000}},{nome:'Pizza Margherita',preco:7500,foto:'',desc:'Molho, mozzarella, tomate',tam:{peq:0,med:4000,gra:7000}},{nome:'Pizza Frango',preco:9000,foto:'',desc:'Frango, milho, mozzarella',tam:{peq:0,med:4000,gra:7000}}];
+let bebidas = JSON.parse(localStorage.getItem('cafe_bebidas')) || [{nome:'Coca-Cola',preco:700}];
 let acomps = JSON.parse(localStorage.getItem('cafe_acomps')) || [{nome:'Batata Frita',preco:1000}];
 let extras = JSON.parse(localStorage.getItem('cafe_extras')) || [{nome:'Queijo Mozzarella',preco:2000}];
 let carrinho=[], selProd=null, selTam=0, selBeb=[], selAcomp=[], selExtras=[], editandoIndex=-1;
-
-function salvarTudo(){ try{ localStorage.setItem('cafe_produtos',JSON.stringify(produtos)); localStorage.setItem('cafe_bebidas',JSON.stringify(bebidas)); localStorage.setItem('cafe_acomps',JSON.stringify(acomps)); localStorage.setItem('cafe_extras',JSON.stringify(extras)); }catch(e){ alert('Foto ainda muito grande! Tira foto mais de longe ou escolhe foto mais pequena.'); } }
-function fotoHTML(p,h){ if(p.foto && (p.foto.startsWith('data:image')||p.foto.startsWith('http'))) return `<img src="${p.foto}" onerror="this.style.display='none'" style="width:100%;height:${h}px;object-fit:cover;border-radius:10px">`; return `<div style="font-size:70px">🍕</div>`; }
-function render(){ document.getElementById('menu').innerHTML = produtos.map((p,i)=>`<div class="card">${fotoHTML(p,140)}<h3>${p.nome}</h3><p>${p.desc}</p><div class="price">${p.preco} Kz</div><button onclick="abrirProd(${i})">Selecionar</button></div>`).join(''); document.getElementById('totalCart').innerText=carrinho.reduce((s,x)=>s+x.total,0)+' Kz'; }
-function abrirProd(i){selProd=produtos[i]; selTam=0; selBeb=[]; selAcomp=[]; selExtras=[]; document.getElementById('mNome').innerText=selProd.nome; document.getElementById('mDesc').innerText=selProd.desc; document.getElementById('mFoto').innerHTML=fotoHTML(selProd,200); renderOpcoes(); document.getElementById('modalProd').classList.add('open');}
-function renderOpcoes(){
- document.getElementById('mTamanhos').innerHTML = [['Pequena',selProd.tam.peq],['Média',selProd.tam.med],['Grande',selProd.tam.gra]].map((t,idx)=>`<div class="opt ${selTam===idx?'sel':''}" onclick="selTam=${idx};renderOpcoes()"><span>${t[0]}</span><b>${t[1]} Kz</b></div>`).join('');
- const mk=(lista,sel,fn)=> lista.length? lista.map((x,idx)=>`<div class="opt ${sel.includes(idx)?'sel':''}" onclick="${fn}(${idx})"><span>${x.nome}</span><b>${x.preco} Kz ${sel.includes(idx)?'✓':'+'}</b></div>`).join('') : '<p style="color:#999">Sem itens</p>';
- document.getElementById('mBebidas').innerHTML=mk(bebidas,selBeb,'toggleBeb'); document.getElementById('mAcomp').innerHTML=mk(acomps,selAcomp,'toggleAcomp'); document.getElementById('mExtras').innerHTML=mk(extras,selExtras,'toggleExtra');
- let total=selProd.preco+[selProd.tam.peq,selProd.tam.med,selProd.tam.gra][selTam]+selBeb.reduce((s,i)=>s+bebidas[i].preco,0)+selAcomp.reduce((s,i)=>s+acomps[i].preco,0)+selExtras.reduce((s,i)=>s+extras[i].preco,0); document.getElementById('mTotal').innerText=total+' Kz';
-}
+function salvarTudo(){ try{localStorage.setItem('cafe_produtos',JSON.stringify(produtos));localStorage.setItem('cafe_bebidas',JSON.stringify(bebidas));localStorage.setItem('cafe_acomps',JSON.stringify(acomps));localStorage.setItem('cafe_extras',JSON.stringify(extras));}catch(e){alert('Foto muito grande!');} }
+function fotoHTML(p,h){ if(p.foto && p.foto.startsWith('data:image')) return `<img src="${p.foto}" style="width:100%;height:${h}px;object-fit:cover;border-radius:10px">`; return `<div style="font-size:70px">🍕</div>`; }
+function render(){ document.getElementById('menu').innerHTML=produtos.map((p,i)=>`<div class="card">${fotoHTML(p,140)}<h3>${p.nome}</h3><p>${p.desc}</p><div class="price">${p.preco} Kz</div><button onclick="abrirProd(${i})">Selecionar</button></div>`).join(''); document.getElementById('totalCart').innerText=carrinho.reduce((s,x)=>s+x.total,0)+' Kz'; }
+function abrirProd(i){selProd=produtos[i];selTam=0;selBeb=[];selAcomp=[];selExtras=[];document.getElementById('mNome').innerText=selProd.nome;document.getElementById('mDesc').innerText=selProd.desc;document.getElementById('mFoto').innerHTML=fotoHTML(selProd,200);renderOpcoes();document.getElementById('modalProd').classList.add('open');}
+function renderOpcoes(){ document.getElementById('mTamanhos').innerHTML=[['Pequena',selProd.tam.peq],['Média',selProd.tam.med],['Grande',selProd.tam.gra]].map((t,idx)=>`<div class="opt ${selTam===idx?'sel':''}" onclick="selTam=${idx};renderOpcoes()"><span>${t[0]}</span><b>${t[1]} Kz</b></div>`).join(''); const mk=(l,s,f)=>l.map((x,idx)=>`<div class="opt ${s.includes(idx)?'sel':''}" onclick="${f}(${idx})"><span>${x.nome}</span><b>${x.preco} Kz</b></div>`).join(''); document.getElementById('mBebidas').innerHTML=mk(bebidas,selBeb,'toggleBeb');document.getElementById('mAcomp').innerHTML=mk(acomps,selAcomp,'toggleAcomp');document.getElementById('mExtras').innerHTML=mk(extras,selExtras,'toggleExtra'); let total=selProd.preco+[selProd.tam.peq,selProd.tam.med,selProd.tam.gra][selTam]+selBeb.reduce((s,i)=>s+bebidas[i].preco,0)+selAcomp.reduce((s,i)=>s+acomps[i].preco,0)+selExtras.reduce((s,i)=>s+extras[i].preco,0); document.getElementById('mTotal').innerText=total+' Kz'; }
 function toggleBeb(i){selBeb=selBeb.includes(i)?selBeb.filter(x=>x!==i):[...selBeb,i];renderOpcoes()}
 function toggleAcomp(i){selAcomp=selAcomp.includes(i)?selAcomp.filter(x=>x!==i):[...selAcomp,i];renderOpcoes()}
 function toggleExtra(i){selExtras=selExtras.includes(i)?selExtras.filter(x=>x!==i):[...selExtras,i];renderOpcoes()}
-function addCarrinho(){ let tamNome=['Pequena','Média','Grande'][selTam]; let total=selProd.preco+[selProd.tam.peq,selProd.tam.med,selProd.tam.gra][selTam]+selBeb.reduce((s,i)=>s+bebidas[i].preco,0)+selAcomp.reduce((s,i)=>s+acomps[i].preco,0)+selExtras.reduce((s,i)=>s+extras[i].preco,0); let detalhe=`${selProd.nome} (${tamNome})`+(selBeb.length?` + ${selBeb.map(i=>bebidas[i].nome).join(', ')}`:''); carrinho.push({nome:detalhe,total}); fechar(); render(); alert('Adicionado!'); }
-function finalizar(){ if(!carrinho.length) return alert('Carrinho vazio'); let msg='*PEDIDO CAFÉ DA VILLA*%0A'+carrinho.map(c=>`- ${c.nome} = ${c.total} Kz`).join('%0A'); window.open('https://wa.me/244923000000?text='+msg); }
+function addCarrinho(){let total=selProd.preco+[selProd.tam.peq,selProd.tam.med,selProd.tam.gra][selTam]+selBeb.reduce((s,i)=>s+bebidas[i].preco,0)+selAcomp.reduce((s,i)=>s+acomps[i].preco,0)+selExtras.reduce((s,i)=>s+extras[i].preco,0);carrinho.push({nome:selProd.nome,total});fechar();render();alert('Adicionado!')}
+function finalizar(){if(!carrinho.length) return alert('Carrinho vazio'); window.open('https://wa.me/244923000000?text='+encodeURIComponent('PEDIDO CAFÉ DA VILLA\n'+carrinho.map(c=>c.nome+' = '+c.total).join('\n')));}
 function fechar(){document.querySelectorAll('.modal').forEach(m=>m.classList.remove('open'))}
-function abrirAdmin(){document.getElementById('modalAdmin').classList.add('open'); listarAdmin();}
-function login(){ if(document.getElementById('senha').value==='1234'){document.getElementById('loginAdmin').style.display='none';document.getElementById('painelAdmin').style.display='block';} else alert('Senha errada'); }
+function abrirAdmin(){document.getElementById('modalAdmin').classList.add('open');listarAdmin();}
+function login(){if(document.getElementById('senha').value==='1234'){document.getElementById('loginAdmin').style.display='none';document.getElementById('painelAdmin').style.display='block';}else alert('Senha errada');}
 
-// COMPRESSOR - DIMINUI FOTO AUTOMATICAMENTE
+function removerFoto(){ document.getElementById('pFoto').value=''; document.getElementById('previewFoto').style.display='none'; document.getElementById('fotoInfo').innerText='Foto removida. Clica em TROCAR FOTO para por nova.'; document.getElementById('fotoInfo').style.display='block'; }
+
 document.getElementById('pFotoFile').addEventListener('change', function(e){
-  let file = e.target.files[0]; if(!file) return;
-  document.getElementById('fotoInfo').innerText='A comprimir foto... espera...';
-  let reader = new FileReader();
-  reader.onload = function(ev){
-    let img = new Image();
-    img.onload = function(){
-      let canvas = document.createElement('canvas');
-      let max = 800; let w=img.width, h=img.height;
-      if(w>max){ h = h*max/w; w=max; }
-      canvas.width=w; canvas.height=h;
-      canvas.getContext('2d').drawImage(img,0,0,w,h);
-      let pequeno = canvas.toDataURL('image/jpeg',0.7);
-      document.getElementById('pFoto').value = pequeno;
-      let prev=document.getElementById('previewFoto'); prev.src=pequeno; prev.style.display='block';
-      document.getElementById('fotoInfo').innerText='✅ Foto pronta! Agora clica em Salvar Produto';
-    };
-    img.src = ev.target.result;
-  };
+  let file=e.target.files[0]; if(!file) return;
+  document.getElementById('fotoInfo').innerText='A comprimir... espera...'; document.getElementById('fotoInfo').style.display='block';
+  let reader=new FileReader();
+  reader.onload=function(ev){ let img=new Image(); img.onload=function(){ let c=document.createElement('canvas'); let max=800; let w=img.width,h=img.height; if(w>max){h=h*max/w;w=max;} c.width=w;c.height=h; c.getContext('2d').drawImage(img,0,0,w,h); let pequeno=c.toDataURL('image/jpeg',0.7); document.getElementById('pFoto').value=pequeno; let prev=document.getElementById('previewFoto'); prev.src=pequeno; prev.style.display='block'; document.getElementById('fotoInfo').innerText='✅ Foto pronta! Agora clica em Atualizar Produto'; }; img.src=ev.target.result; };
   reader.readAsDataURL(file);
 });
 
 function salvarProduto(){
  let nome=document.getElementById('pNome').value.trim(); if(!nome) return alert('Escreve o nome');
  let novo={nome:nome,preco:+document.getElementById('pPreco').value||0,foto:document.getElementById('pFoto').value,desc:document.getElementById('pDesc').value,tam:{peq:+document.getElementById('tPeq').value||0,med:+document.getElementById('tMed').value||0,gra:+document.getElementById('tGra').value||0}};
- if(editandoIndex>=0){ produtos[editandoIndex]=novo; alert('Atualizado!'); } else { produtos.push(novo); alert('Salvo!'); }
+ if(editandoIndex>=0){produtos[editandoIndex]=novo; alert('✅ Foto atualizada!');} else {produtos.push(novo); alert('Salvo!');}
  cancelarEdicao(); salvarTudo(); render(); listarAdmin();
 }
-function editarProduto(i){ editandoIndex=i; let p=produtos[i]; document.getElementById('tituloForm').innerText='✏️ A editar: '+p.nome; document.getElementById('pNome').value=p.nome; document.getElementById('pPreco').value=p.preco; document.getElementById('pDesc').value=p.desc; document.getElementById('pFoto').value=p.foto||''; document.getElementById('tPeq').value=p.tam.peq; document.getElementById('tMed').value=p.tam.med; document.getElementById('tGra').value=p.tam.gra; document.getElementById('btnSalvar').innerText='💾 Atualizar Produto'; document.getElementById('btnCancelarEdicao').style.display='block'; if(p.foto){let prev=document.getElementById('previewFoto'); prev.src=p.foto; prev.style.display='block';} }
-function cancelarEdicao(){ editandoIndex=-1; document.getElementById('tituloForm').innerText='➕ Adicionar Produto'; document.getElementById('pNome').value=''; document.getElementById('pPreco').value=''; document.getElementById('pDesc').value=''; document.getElementById('pFoto').value=''; document.getElementById('previewFoto').style.display='none'; document.getElementById('btnSalvar').innerText='✅ Salvar Produto'; document.getElementById('btnCancelarEdicao').style.display='none'; document.getElementById('fotoInfo').innerText=''; }
-function salvarBebida(){ let n=document.getElementById('bNome').value; if(!n) return; bebidas.push({nome:n,preco:+document.getElementById('bPreco').value||0}); salvarTudo(); listarAdmin(); }
-function salvarAcomp(){ let n=document.getElementById('aNome').value; if(!n) return; acomps.push({nome:n,preco:+document.getElementById('aPreco').value||0}); salvarTudo(); listarAdmin(); }
-function salvarExtra(){ let n=document.getElementById('eNome').value; if(!n) return; extras.push({nome:n,preco:+document.getElementById('ePreco').value||0}); salvarTudo(); listarAdmin(); }
+function editarProduto(i){
+ editandoIndex=i; let p=produtos[i];
+ document.getElementById('tituloForm').innerText='✏️ A EDITAR: '+p.nome+' - sobe para cima para trocar foto';
+ document.getElementById('pNome').value=p.nome; document.getElementById('pPreco').value=p.preco; document.getElementById('pDesc').value=p.desc; document.getElementById('pFoto').value=p.foto||'';
+ document.getElementById('tPeq').value=p.tam.peq; document.getElementById('tMed').value=p.tam.med; document.getElementById('tGra').value=p.tam.gra;
+ document.getElementById('btnSalvar').innerText='💾 ATUALIZAR PRODUTO';
+ document.getElementById('btnCancelarEdicao').style.display='block';
+ let prev=document.getElementById('previewFoto');
+ if(p.foto){ prev.src=p.foto; prev.style.display='block'; document.getElementById('fotoInfo').innerText='Esta é a foto atual. Clica em TROCAR FOTO para substituir.'; }
+ else { prev.style.display='none'; document.getElementById('fotoInfo').innerText='Sem foto. Clica em TROCAR FOTO.'; }
+ document.querySelector('#modalAdmin .box').scrollTop=0;
+}
+function cancelarEdicao(){ editandoIndex=-1; document.getElementById('tituloForm').innerText='➕ Adicionar Produto'; document.getElementById('pNome').value=''; document.getElementById('pPreco').value=''; document.getElementById('pDesc').value=''; document.getElementById('pFoto').value=''; document.getElementById('previewFoto').style.display='none'; document.getElementById('fotoInfo').innerText='Nenhuma foto ainda.'; document.getElementById('btnSalvar').innerText='✅ Salvar Produto'; document.getElementById('btnCancelarEdicao').style.display='none'; }
+function salvarBebida(){let n=document.getElementById('bNome').value; if(!n) return; bebidas.push({nome:n,preco:+document.getElementById('bPreco').value||0}); salvarTudo(); listarAdmin();}
+function salvarAcomp(){let n=document.getElementById('aNome').value; if(!n) return; acomps.push({nome:n,preco:+document.getElementById('aPreco').value||0}); salvarTudo(); listarAdmin();}
+function salvarExtra(){let n=document.getElementById('eNome').value; if(!n) return; extras.push({nome:n,preco:+document.getElementById('ePreco').value||0}); salvarTudo(); listarAdmin();}
 function listarAdmin(){
- document.getElementById('listaProdutos').innerHTML=produtos.map((p,i)=>`<div class="item-admin"><span>${p.nome} - ${p.preco} Kz</span><span><button class="edit" onclick="editarProduto(${i})">✏️ Editar</button> <button class="del" onclick="if(confirm('Apagar?')){produtos.splice(${i},1);salvarTudo();render();listarAdmin()}">🗑️</button></span></div>`).join('');
+ document.getElementById('listaProdutos').innerHTML=produtos.map((p,i)=>`<div class="item-admin"><span>${p.nome}</span><span><button class="edit" onclick="editarProduto(${i})">✏️ Editar</button> <button class="del" onclick="if(confirm('Apagar?')){produtos.splice(${i},1);salvarTudo();render();listarAdmin()}">🗑️</button></span></div>`).join('');
  document.getElementById('listaBebidas').innerHTML=bebidas.map((b,i)=>`<div class="item-admin"><span>${b.nome}</span><button class="del" onclick="bebidas.splice(${i},1);salvarTudo();listarAdmin()">X</button></div>`).join('');
  document.getElementById('listaAcomp').innerHTML=acomps.map((b,i)=>`<div class="item-admin"><span>${b.nome}</span><button class="del" onclick="acomps.splice(${i},1);salvarTudo();listarAdmin()">X</button></div>`).join('');
  document.getElementById('listaExtras').innerHTML=extras.map((b,i)=>`<div class="item-admin"><span>${b.nome}</span><button class="del" onclick="extras.splice(${i},1);salvarTudo();listarAdmin()">X</button></div>`).join('');
