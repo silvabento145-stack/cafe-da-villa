@@ -3,70 +3,128 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Café da Villa - Pizzaria</title>
+<title>Café da Villa</title>
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
-body{background:#fff8f0;color:#222}
-header{background:#b91c1c;color:#fff;padding:20px;text-align:center}
-header h1{font-size:28px} header p{opacity:.9}
-nav{background:#111;color:#fff;display:flex;justify-content:center;gap:15px;padding:12px}
-nav a{color:#fff;text-decoration:none;font-weight:bold}
-.container{max-width:900px;margin:auto;padding:15px}
-.card{background:#fff;border-radius:15px;padding:15px;margin-bottom:15px;box-shadow:0 2px 10px #0001;display:flex;gap:12px;align-items:center}
-.card img{width:90px;height:90px;object-fit:cover;border-radius:12px;background:#eee}
-.card h3{font-size:18px} .card p{font-size:13px;color:#666}
-.price{font-weight:bold;color:#b91c1c;font-size:18px;margin:5px 0}
-button{background:#b91c1c;color:#fff;border:0;padding:10px 16px;border-radius:10px;font-weight:bold;cursor:pointer}
-button.green{background:#16a34a}
-input,textarea,select{width:100%;padding:12px;margin:6px 0;border:1px solid #ddd;border-radius:10px}
-.cart{position:fixed;bottom:15px;left:15px;right:15px;background:#111;color:#fff;padding:14px;border-radius:15px;display:flex;justify-content:space-between;align-items:center}
-.hidden{display:none}
-.admin{background:#fff;padding:15px;border-radius:15px;margin-top:15px}
+*{box-sizing:border-box} body{font-family:Arial;margin:0;background:#fff5f0}
+header{background:#c0392b;color:#fff;padding:15px;text-align:center;position:sticky;top:0;z-index:10}
+header h1{margin:0} .hero{text-align:center;padding:20px}
+.hero h2{font-size:28px;margin:5px} .hero p{color:#666}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:12px}
+.card{background:#fff;border-radius:12px;padding:10px;box-shadow:0 2px 8px #0001;text-align:center}
+.card img{width:100%;height:130px;object-fit:cover;border-radius:10px}
+.card h3{margin:8px 0 2px} .price{color:#e67e22;font-weight:bold;font-size:18px}
+button{background:#e67e22;color:#fff;border:0;padding:10px 15px;border-radius:20px;font-weight:bold;cursor:pointer;width:100%;margin-top:5px}
+button.sec{background:#333} .cart{position:fixed;bottom:0;left:0;right:0;background:#111;color:#fff;padding:12px;text-align:center;cursor:pointer}
+/* MODAL */
+.modal{position:fixed;inset:0;background:#000a;display:none;align-items:flex-end;justify-content:center;z-index:20}
+.modal.open{display:flex} .box{background:#fff;width:100%;max-width:500px;max-height:90vh;overflow:auto;border-radius:20px 20px 0 0;padding:20px}
+.opt{display:flex;justify-content:space-between;align-items:center;background:#f8f8f8;padding:10px;border-radius:10px;margin:5px 0}
+.opt.sel{background:#ffe8d6;border:2px solid #e67e22}
+.opt button{width:auto;padding:6px 12px}
+input,select,textarea{width:100%;padding:10px;margin:5px 0;border:1px solid #ddd;border-radius:8px}
+label{font-weight:bold;font-size:13px} .admin-sec{background:#fff3e0;padding:10px;border-radius:10px;margin:10px 0}
 </style>
 </head>
 <body>
-<header><h1>🍕 Café da Villa</h1><p>Pizzaria • Luanda • Entrega Rápida</p></header>
-<nav><a href="#" onclick="show('loja')">Loja</a><a href="#" onclick="show('adminLogin')">Admin</a></nav>
-<div class="container" id="loja">
-<h2 style="margin:10px 0">Nosso Menu</h2>
-<div id="produtos"></div>
-</div>
-<div class="container hidden" id="adminLogin">
-<h2>Área Admin</h2><p>Senha: <b>1234</b></p>
-<input id="senha" type="password" placeholder="Senha do Admin">
-<button onclick="entrar()">Entrar</button>
-</div>
-<div class="container hidden" id="admin">
-<div class="admin">
-<h2>Adicionar Pizza / Produto</h2>
-<input id="nome" placeholder="Nome ex: Pizza Frango">
-<input id="preco" type="number" placeholder="Preço ex: 8000">
-<input id="desc" placeholder="Descrição">
-<input id="foto" placeholder="Link da foto (opcional)">
-<button class="green" onclick="addProduto()">Adicionar Produto</button>
-<button onclick="sair()">Sair do Admin</button>
-</div>
-</div>
-<div class="cart"><span id="cartInfo">🛒 Carrinho: 0 itens • 0 Kz</span><button class="green" onclick="finalizar()">Pedir no WhatsApp</button></div>
+<header><h1>☕ Café da Villa</h1><p>O sabor que transforma qualquer momento</p><button onclick="abrirAdmin()" style="width:auto;background:#fff;color:#c0392b">Admin</button></header>
+<div class="hero"><h2>Cada Fatia, Uma Delícia</h2><p>Ingredientes frescos • Entrega rápida em Luanda</p></div>
+<div id="menu" class="grid"></div>
+<div class="cart" onclick="finalizar()">🛒 Ver Carrinho • <span id="totalCart">0 Kz</span></div>
+
+<!-- MODAL PRODUTO -->
+<div id="modalProd" class="modal"><div class="box">
+<button onclick="fechar()" style="background:#ddd;color:#000">X Fechar</button>
+<h2 id="mNome"></h2><p id="mDesc"></p>
+<label>TAMANHO</label><div id="mTamanhos"></div>
+<label>BEBIDAS / REFRIGERANTES</label><div id="mBebidas"></div>
+<label>ACOMPANHAMENTOS</label><div id="mAcomp"></div>
+<label>EXTRAS</label><div id="mExtras"></div>
+<h3>Total: <span id="mTotal"></span></h3>
+<button onclick="addCarrinho()">Adicionar ao Carrinho</button>
+</div></div>
+
+<!-- MODAL ADMIN -->
+<div id="modalAdmin" class="modal"><div class="box">
+<h2>Admin Café da Villa</h2>
+<div id="loginAdmin"><input id="senha" placeholder="Senha: 1234" type="password"><button onclick="login()">Entrar</button></div>
+<div id="painelAdmin" style="display:none">
+<h3>➕ Adicionar Produto</h3>
+<input id="pNome" placeholder="Nome ex: Pizza Afonte">
+<input id="pPreco" type="number" placeholder="Preço base ex: 5000">
+<input id="pFoto" placeholder="Link da foto ou emoji 🍕">
+<input id="pDesc" placeholder="Ingredientes">
+<label>Preço Tamanho Pequena (+ Kz)</label><input id="tPeq" type="number" value="0">
+<label>Preço Tamanho Média (+ Kz)</label><input id="tMed" type="number" value="4000">
+<label>Preço Tamanho Grande (+ Kz)</label><input id="tGra" type="number" value="7000">
+<button onclick="salvarProduto()">Salvar Produto</button>
+
+<div class="admin-sec"><h3>🥤 Refrigerantes</h3>
+<input id="bNome" placeholder="Ex: Coca-Cola"><input id="bPreco" type="number" placeholder="Preço ex: 700">
+<button onclick="salvarBebida()">Adicionar Refrigerante</button><div id="listaBebidas"></div></div>
+
+<div class="admin-sec"><h3>🍟 Acompanhamentos</h3>
+<input id="aNome" placeholder="Ex: Batata Frita"><input id="aPreco" type="number" placeholder="Preço ex: 1000">
+<button onclick="salvarAcomp()">Adicionar Acompanhamento</button><div id="listaAcomp"></div></div>
+
+<div class="admin-sec"><h3>🧀 Extras</h3>
+<input id="eNome" placeholder="Ex: Queijo Extra"><input id="ePreco" type="number" placeholder="Preço ex: 2000">
+<button onclick="salvarExtra()">Adicionar Extra</button><div id="listaExtras"></div></div>
+
+<button class="sec" onclick="fechar()">Fechar Admin</button>
+</div></div></div>
+
 <script>
-let produtos = JSON.parse(localStorage.getItem('villa_produtos') || 'null') || [
-{nome:'Pizza Margherita',preco:7500,desc:'Molho de tomate, queijo e manjericão',foto:'https://images.unsplash.com/photo-1574071318508-1cdbab80d002?w=400'},
-{nome:'Pizza Frango',preco:9000,desc:'Frango, queijo, milho e orégano',foto:'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=400'},
-{nome:'Pizza Calabresa',preco:8500,desc:'Calabresa, cebola e queijo',foto:'https://images.unsplash.com/photo-1628840042765-356cda07504e?w=400'}
+let produtos = JSON.parse(localStorage.getItem('produtos')) || [
+{nome:'Pizza Margherita',preco:7500,foto:'🍕',desc:'Molho, mozzarella, tomate',tam:{peq:0,med:4000,gra:7000}},
+{nome:'Pizza Frango',preco:9000,foto:'🍕',desc:'Frango, milho, mozzarella',tam:{peq:0,med:4000,gra:7000}}
 ];
-let carrinho=[];
+let bebidas = JSON.parse(localStorage.getItem('bebidas')) || [{nome:'Coca-Cola',preco:700},{nome:'Fanta',preco:700},{nome:'Sprite',preco:700}];
+let acomps = JSON.parse(localStorage.getItem('acomps')) || [{nome:'Batata Frita',preco:1000},{nome:'Crispy de Frango',preco:2000}];
+let extras = JSON.parse(localStorage.getItem('extras')) || [{nome:'Queijo Mozzarella',preco:2000},{nome:'Bacon Extra',preco:1500}];
+let carrinho=[], selProd=null, selTam=0, selBeb=[], selAcomp=[], selExtras=[];
+
+function salvarTudo(){localStorage.setItem('produtos',JSON.stringify(produtos));localStorage.setItem('bebidas',JSON.stringify(bebidas));localStorage.setItem('acomps',JSON.stringify(acomps));localStorage.setItem('extras',JSON.stringify(extras));}
 function render(){
-document.getElementById('produtos').innerHTML = produtos.map((p,i)=>`
-<div class="card"><img src="${p.foto||'https://via.placeholder.com/90'}"><div style="flex:1"><h3>${p.nome}</h3><p>${p.desc}</p><div class="price">${p.preco} Kz</div><button onclick="addCarrinho(${i})">Adicionar +</button></div></div>`).join('');
+ document.getElementById('menu').innerHTML = produtos.map((p,i)=>`<div class="card"><div style="font-size:80px">${p.foto}</div><h3>${p.nome}</h3><p>${p.desc}</p><div class="price">${p.preco} Kz</div><button onclick="abrirProd(${i})">Selecionar</button></div>`).join('');
+ let t=carrinho.reduce((s,x)=>s+x.total,0); document.getElementById('totalCart').innerText=t+' Kz';
 }
-function addCarrinho(i){carrinho.push(produtos[i]); updateCart();}
-function updateCart(){let total=carrinho.reduce((s,p)=>s+p.preco,0); document.getElementById('cartInfo').innerText=`🛒 Carrinho: ${carrinho.length} itens • ${total} Kz`;}
-function finalizar(){if(!carrinho.length) return alert('Carrinho vazio'); let msg='Olá Café da Villa! Quero pedir:%0A'; carrinho.forEach(p=>msg+=`- ${p.nome} - ${p.preco} Kz%0A`); let total=carrinho.reduce((s,p)=>s+p.preco,0); msg+=`Total: ${total} Kz`; window.open('https://wa.me/244923000000?text='+msg,'_blank');}
-function show(id){['loja','adminLogin','admin'].forEach(x=>document.getElementById(x).classList.add('hidden')); document.getElementById(id).classList.remove('hidden');}
-function entrar(){if(document.getElementById('senha').value=='1234'){show('admin')}else alert('Senha errada');}
-function sair(){show('loja')}
-function addProduto(){let n=document.getElementById('nome').value, pr=parseInt(document.getElementById('preco').value), d=document.getElementById('desc').value, f=document.getElementById('foto').value; if(!n||!pr) return alert('Falta nome e preço'); produtos.push({nome:n,preco:pr,desc:d,foto:f}); localStorage.setItem('villa_produtos',JSON.stringify(produtos)); render(); alert('Adicionado!'); show('loja');}
+function abrirProd(i){selProd=produtos[i]; selTam=0; selBeb=[]; selAcomp=[]; selExtras=[];
+ document.getElementById('mNome').innerText=selProd.nome; document.getElementById('mDesc').innerText=selProd.desc;
+ renderOpcoes(); document.getElementById('modalProd').classList.add('open');
+}
+function renderOpcoes(){
+ document.getElementById('mTamanhos').innerHTML = [['Pequena',selProd.tam.peq],['Média',selProd.tam.med],['Grande',selProd.tam.gra]].map((t,idx)=>`<div class="opt ${selTam===idx?'sel':''}" onclick="selTam=${idx};renderOpcoes()"><span>${t[0]} ${t[1]>0?'+ '+t[1]+' Kz':''}</span><b>${t[1]} Kz</b></div>`).join('');
+ const mk=(lista,sel,fn)=>lista.map((x,idx)=>`<div class="opt ${sel.includes(idx)?'sel':''}" onclick="${fn}(${idx})"><span>${x.nome}</span><b>${x.preco} Kz ${sel.includes(idx)?'✓':'+'}</b></div>`).join('');
+ document.getElementById('mBebidas').innerHTML=mk(bebidas,selBeb,'toggleBeb');
+ document.getElementById('mAcomp').innerHTML=mk(acomps,selAcomp,'toggleAcomp');
+ document.getElementById('mExtras').innerHTML=mk(extras,selExtras,'toggleExtra');
+ let tamVal=[selProd.tam.peq,selProd.tam.med,selProd.tam.gra][selTam];
+ let total=selProd.preco+tamVal+selBeb.reduce((s,i)=>s+bebidas[i].preco,0)+selAcomp.reduce((s,i)=>s+acomps[i].preco,0)+selExtras.reduce((s,i)=>s+extras[i].preco,0);
+ document.getElementById('mTotal').innerText=total+' Kz';
+}
+function toggleBeb(i){selBeb=selBeb.includes(i)?selBeb.filter(x=>x!==i):[...selBeb,i];renderOpcoes()}
+function toggleAcomp(i){selAcomp=selAcomp.includes(i)?selAcomp.filter(x=>x!==i):[...selAcomp,i];renderOpcoes()}
+function toggleExtra(i){selExtras=selExtras.includes(i)?selExtras.filter(x=>x!==i):[...selExtras,i];renderOpcoes()}
+function addCarrinho(){
+ let tamNome=['Pequena','Média','Grande'][selTam]; let tamVal=[selProd.tam.peq,selProd.tam.med,selProd.tam.gra][selTam];
+ let total=selProd.preco+tamVal+selBeb.reduce((s,i)=>s+bebidas[i].preco,0)+selAcomp.reduce((s,i)=>s+acomps[i].preco,0)+selExtras.reduce((s,i)=>s+extras[i].preco,0);
+ let detalhe=`${selProd.nome} (${tamNome})` + (selBeb.length?` + ${selBeb.map(i=>bebidas[i].nome).join(', ')}`:'') + (selAcomp.length?` + ${selAcomp.map(i=>acomps[i].nome).join(', ')}`:'') + (selExtras.length?` + ${selExtras.map(i=>extras[i].nome).join(', ')}`:'');
+ carrinho.push({nome:detalhe,total}); fechar(); render(); alert('Adicionado: '+detalhe+' = '+total+' Kz');
+}
+function finalizar(){ if(!carrinho.length) return alert('Carrinho vazio');
+ let msg='*PEDIDO CAFÉ DA VILLA*%0A'+carrinho.map(c=>`- ${c.nome} = ${c.total} Kz`).join('%0A')+'%0A*Total: '+carrinho.reduce((s,x)=>s+x.total,0)+' Kz*';
+ window.open('https://wa.me/244923000000?text='+msg); }
+function fechar(){document.querySelectorAll('.modal').forEach(m=>m.classList.remove('open'))}
+function abrirAdmin(){document.getElementById('modalAdmin').classList.add('open'); listarAdmin();}
+function login(){ if(document.getElementById('senha').value==='1234'){document.getElementById('loginAdmin').style.display='none';document.getElementById('painelAdmin').style.display='block';} else alert('Senha errada'); }
+function salvarProduto(){ produtos.push({nome:document.getElementById('pNome').value,preco:+document.getElementById('pPreco').value,foto:document.getElementById('pFoto').value||'🍕',desc:document.getElementById('pDesc').value,tam:{peq:+document.getElementById('tPeq').value,med:+document.getElementById('tMed').value,gra:+document.getElementById('tGra').value}}); salvarTudo(); render(); alert('Produto salvo!'); }
+function salvarBebida(){ bebidas.push({nome:document.getElementById('bNome').value,preco:+document.getElementById('bPreco').value}); salvarTudo(); listarAdmin(); }
+function salvarAcomp(){ acomps.push({nome:document.getElementById('aNome').value,preco:+document.getElementById('aPreco').value}); salvarTudo(); listarAdmin(); }
+function salvarExtra(){ extras.push({nome:document.getElementById('eNome').value,preco:+document.getElementById('ePreco').value}); salvarTudo(); listarAdmin(); }
+function listarAdmin(){
+ document.getElementById('listaBebidas').innerHTML=bebidas.map((b,i)=>`<p>${b.nome} - ${b.preco} Kz <button onclick="bebidas.splice(${i},1);salvarTudo();listarAdmin()" style="width:auto;padding:2px 8px;background:red">X</button></p>`).join('');
+ document.getElementById('listaAcomp').innerHTML=acomps.map((b,i)=>`<p>${b.nome} - ${b.preco} Kz <button onclick="acomps.splice(${i},1);salvarTudo();listarAdmin()" style="width:auto;padding:2px 8px;background:red">X</button></p>`).join('');
+ document.getElementById('listaExtras').innerHTML=extras.map((b,i)=>`<p>${b.nome} - ${b.preco} Kz <button onclick="extras.splice(${i},1);salvarTudo();listarAdmin()" style="width:auto;padding:2px 8px;background:red">X</button></p>`).join('');
+}
 render();
-</script>
-</body>
-</html>
+</script></body></html>
