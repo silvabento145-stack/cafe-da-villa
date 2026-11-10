@@ -23,7 +23,7 @@ button.aprovar{background:#2ecc71 !important;width:auto;padding:7px 12px;font-si
 .modal.open{display:flex} .box{background:#fff;width:100%;max-width:520px;max-height:92vh;overflow:auto;border-radius:20px 20px 0 0;padding:20px;position:relative}
 .opt{display:flex;justify-content:space-between;background:#f8f8f8;padding:10px;border-radius:10px;margin:5px 0}
 .opt.sel{background:#ffe8d6;border:2px solid #e67e22}
-input{width:100%;padding:10px;margin:5px 0;border:1px solid #ddd;border-radius:8px}
+input,select{width:100%;padding:10px;margin:5px 0;border:1px solid #ddd;border-radius:8px}
 label{font-weight:bold;font-size:13px;display:block;margin-top:10px}
 .admin-sec{background:#fff3e0;padding:10px;border-radius:10px;margin:10px 0}
 .item-admin{display:flex;justify-content:space-between;align-items:center;background:#fff;padding:8px;border-radius:8px;margin:4px 0}
@@ -41,10 +41,24 @@ label{font-weight:bold;font-size:13px;display:block;margin-top:10px}
 #menuLateral a{display:block;padding:14px 10px;border-bottom:1px solid #eee;text-decoration:none;color:#222;font-weight:bold;font-size:16px}
 #menuLateral .fecharMenu{background:#e74c3c;color:#fff;border:0;width:40px;height:40px;border-radius:50%;font-size:18px;float:right}
 .config-whats{background:#e8f8e8;padding:12px;border-radius:12px;margin:10px 0;border:1px solid #2ecc71}
+#modalCardapio .box{background:#0f1a2e !important;color:#fff !important;padding:0 !important;overflow:hidden}
+.cardapio-top{padding:20px 16px 10px;text-align:center}
+.cardapio-top h2{font-size:28px;margin:0}
+.cardapio-top .linha{width:90px;height:4px;background:linear-gradient(90deg,#e74c3c,#f39c12);margin:10px auto;border-radius:5px}
+.cardapio-top p{color:#b0b8c5;font-size:14px;line-height:1.5}
+.cat-bar{background:#1e2a3f;margin:12px;padding:12px;border-radius:16px;display:flex;gap:10px;justify-content:center}
+.cat-btn{background:#16223a !important;color:#fff !important;border:1px solid #2a3a55 !important;width:68px !important;height:56px !important;border-radius:12px !important;font-size:28px !important;padding:0 !important;margin:0 !important}
+.cat-btn.ativo{background:#e74c3c !important;border-color:#e74c3c !important;box-shadow:0 0 15px #e74c3c88}
+.cardapio-lista{padding:0 14px 20px;max-height:55vh;overflow:auto}
+.card-dark{background:#1a2740;border-radius:14px;overflow:hidden;margin:12px 0}
+.card-dark img{width:100%;height:200px;object-fit:cover;display:block}
+.card-dark .info{padding:14px}
+.card-dark h3{margin:0 0 6px;font-size:18px}
+.card-dark p{color:#b0b8c5;font-size:13px;margin:0 0 10px;line-height:1.4}
+.cat-tag{background:#e74c3c;color:#fff;font-size:11px;padding:4px 10px;border-radius:20px;position:absolute;margin:10px;font-weight:bold}
 </style>
 </head>
 <body>
-<!-- TELA PRINCIPAL: SÓ CARRINHO + 3 BARRAS - SEM PEDIDOS -->
 <header>
 <div onclick="cliqueLogo()" style="flex:1"><h1>☕ Café da Villa</h1><p>O sabor que transforma qualquer momento</p></div>
 <div style="display:flex;gap:6px;align-items:center">
@@ -52,8 +66,6 @@ label{font-weight:bold;font-size:13px;display:block;margin-top:10px}
 <button class="btn-menu" onclick="abrirMenuLateral()">☰</button>
 </div>
 </header>
-
-<!-- MENU 3 BARRAS - SEM CARRINHO, COM PEDIDOS E CARDÁPIO -->
 <div id="menuLateral">
 <button class="fecharMenu" onclick="fecharMenuLateral()">✕</button>
 <h2 style="margin-top:40px">☕ Café da Villa</h2>
@@ -62,7 +74,6 @@ label{font-weight:bold;font-size:13px;display:block;margin-top:10px}
 <a href="#" onclick="fecharMenuLateral();abrirMeusPedidos()">📋 Meus Pedidos</a>
 <a href="#" onclick="fecharMenuLateral();abrirCardapio()">📖 Nosso Cardápio</a>
 <a href="#" onclick="fecharMenuLateral();falarWhatsApp()">💬 Falar no WhatsApp</a>
-<div style="background:#fff3e0;padding:10px;border-radius:10px;margin-top:15px;font-size:13px;color:#666;text-align:center">Aqui depois tu vais me dizer<br>o que fazer no Cardápio 👑</div>
 </div>
 <div id="fundoMenu" onclick="fecharMenuLateral()" style="position:fixed;inset:0;background:#0005;z-index:55;display:none"></div>
 
@@ -75,8 +86,21 @@ label{font-weight:bold;font-size:13px;display:block;margin-top:10px}
 <div id="modalCarrinho" class="modal"><div class="box"><button class="btn-x-vermelho" onclick="fechar()">✕</button><h2>🛒 Teu Carrinho</h2><div id="listaCarrinho"></div><h3 id="totalCarrinho"></h3><label>Teu Nome</label><input id="clienteNome" placeholder="Ex: Silva Bento"><label>Teu WhatsApp</label><input id="clienteFone" placeholder="Ex: 923000000"><button onclick="fazerPedido()">✅ Fazer Pedido</button></div></div>
 <div id="modalMeusPedidos" class="modal"><div class="box"><button class="btn-x-vermelho" onclick="fechar()">✕</button><h2>📋 Meus Pedidos</h2><div id="listaMeusPedidos"></div></div></div>
 
-<!-- MODAL NOSSO CARDÁPIO -->
-<div id="modalCardapio" class="modal"><div class="box"><button class="btn-x-vermelho" onclick="fechar()">✕</button><h2>📖 Nosso Cardápio</h2><p style="color:#666;font-size:14px">Aqui vai ficar o nosso cardápio completo. Depois o chefe vai dizer o que fazer aqui.</p><div id="listaCardapio"></div></div></div>
+<!-- NOSSO CARDÁPIO - SÓ PIZZA, CACHORRO, HAMBÚRGUER -->
+<div id="modalCardapio" class="modal"><div class="box">
+<button class="btn-x-vermelho" onclick="fechar()">✕</button>
+<div class="cardapio-top">
+<h2>Nosso Cardápio</h2><div class="linha"></div>
+<p>Escolha entre pizzas autênticas, cachorros deliciosos e hambúrgueres incríveis</p>
+</div>
+<div class="cat-bar">
+<button class="cat-btn ativo" id="catPizza" onclick="filtrarCardapio('Pizza')">🍕</button>
+<button class="cat-btn" id="catCachorro" onclick="filtrarCardapio('Cachorro')">🌭</button>
+<button class="cat-btn" id="catHamburguer" onclick="filtrarCardapio('Hamburguer')">🍔</button>
+</div>
+<div style="text-align:center;color:#888;font-size:12px" id="catNomeAtual">🍕 Pizzas</div>
+<div class="cardapio-lista" id="listaCardapio"></div>
+</div></div>
 
 <div id="modalAdmin" class="modal"><div class="box">
 <button class="btn-x-vermelho" onclick="voltarCliente()">✕</button>
@@ -87,7 +111,10 @@ label{font-weight:bold;font-size:13px;display:block;margin-top:10px}
 <div id="abaProd">
 <div class="config-whats"><h3 style="margin:0">📲 Número do WhatsApp da Loja</h3><p style="font-size:12px;color:#666">Aqui tu trocas o número quando quiseres.</p><label>Ex: 923000000 (sem +244)</label><input id="numeroWhats" placeholder="923000000"><button onclick="salvarWhats()" style="background:#2ecc71">💾 Salvar Número do WhatsApp</button><p id="whatsAtual" style="font-size:13px;color:#2ecc71;font-weight:bold"></p></div>
 <h3 id="tituloForm">➕ Adicionar Produto</h3>
-<input id="pNome" placeholder="Nome ex: Pizza de Chouriço"><input id="pPreco" type="number" placeholder="Preço ex: 5000"><input id="pDesc" placeholder="Ingredientes">
+<input id="pNome" placeholder="Nome ex: Pizza de Chouriço">
+<label>Categoria do Produto</label>
+<select id="pCategoria"><option value="Pizza">🍕 Pizza</option><option value="Cachorro">🌭 Cachorro</option><option value="Hamburguer">🍔 Hambúrguer</option></select>
+<input id="pPreco" type="number" placeholder="Preço ex: 5000"><input id="pDesc" placeholder="Ingredientes">
 <label>📸 FOTO DO PRODUTO</label><div class="foto-box"><img id="previewFoto"><p id="fotoInfo" style="font-size:13px;color:#666">Nenhuma foto ainda.</p><input id="pFotoFile" type="file" accept="image/*" style="display:none"><button type="button" class="btn-foto" onclick="document.getElementById('pFotoFile').click()">📸 TROCAR FOTO / TIRAR FOTO</button><button type="button" class="btn-remover" onclick="removerFoto()">🗑️ REMOVER FOTO ATUAL</button></div><input id="pFoto" type="hidden">
 <label>Preço Pequena</label><input id="tPeq" type="number" value="0"><label>Preço Média</label><input id="tMed" type="number" value="4000"><label>Preço Grande</label><input id="tGra" type="number" value="7000">
 <button id="btnSalvar" onclick="salvarProduto()">✅ Salvar Produto</button><button id="btnCancelarEdicao" onclick="cancelarEdicao()" style="background:#999;display:none">Cancelar Edição</button>
@@ -112,16 +139,32 @@ function fecharMenuLateral(){ document.getElementById('menuLateral').classList.r
 function falarWhatsApp(){ let n=getWhats(); window.open('https://wa.me/244'+n+'?text='+encodeURIComponent('Olá Café da Villa, quero fazer um pedido!')); }
 function getWhats(){ return localStorage.getItem('cafe_whats') || '923000000'; }
 function salvarWhats(){ let n=document.getElementById('numeroWhats').value.replace(/\D/g,''); if(n.length<9) return aviso('Escreve um número válido, ex: 923000000'); localStorage.setItem('cafe_whats',n); document.getElementById('whatsAtual').innerText='✅ Número atual: +244 '+n; aviso('✅ Número do WhatsApp atualizado para +244 '+n); }
-// NOSSO CARDÁPIO - POR ENQUANTO MOSTRA OS PRODUTOS, DEPOIS TU DIZES O QUE FAZER
-function abrirCardapio(){ document.getElementById('listaCardapio').innerHTML=produtos.map(p=>`<div style="display:flex;justify-content:space-between;padding:12px;background:#f8f8f8;border-radius:10px;margin:6px 0"><div><b>${p.nome}</b><br><span style="font-size:13px;color:#666">${p.desc}</span></div><b style="color:#e67e22">${p.preco} Kz</b></div>`).join('') || '<p>Ainda sem produtos.</p>'; document.getElementById('modalCardapio').classList.add('open'); }
-let produtos = JSON.parse(localStorage.getItem('cafe_produtos')) || [{nome:'Pizza de Chouriço',preco:5000,foto:'',desc:'Chouriço, mozzarella, tomate, azeitonas',tam:{peq:0,med:4000,gra:7000}},{nome:'Pizza Margherita',preco:7500,foto:'',desc:'Molho, mozzarella, tomate',tam:{peq:0,med:4000,gra:7000}},{nome:'Pizza Frango',preco:9000,foto:'',desc:'Frango, milho, mozzarella',tam:{peq:0,med:4000,gra:7000}}];
+let catAtual='Pizza';
+function abrirCardapio(){ filtrarCardapio('Pizza'); document.getElementById('modalCardapio').classList.add('open'); }
+function filtrarCardapio(cat){
+ catAtual=cat;
+ document.querySelectorAll('.cat-btn').forEach(b=>b.classList.remove('ativo'));
+ let idMap={Pizza:'catPizza',Cachorro:'catCachorro',Hamburguer:'catHamburguer'};
+ if(document.getElementById(idMap[cat])) document.getElementById(idMap[cat]).classList.add('ativo');
+ let nomes={Pizza:'🍕 Pizzas',Cachorro:'🌭 Cachorros',Hamburguer:'🍔 Hambúrgueres'};
+ document.getElementById('catNomeAtual').innerText=nomes[cat]||cat;
+ let lista = produtos.filter(p=>(p.categoria||'Pizza')===cat);
+ if(!lista.length){ document.getElementById('listaCardapio').innerHTML='<p style="text-align:center;color:#888;padding:30px">Ainda não há produtos nesta categoria.<br>Adiciona no Admin.</p>'; return; }
+ document.getElementById('listaCardapio').innerHTML=lista.map((p)=>{
+  let idx=produtos.indexOf(p);
+  let emoji = p.categoria==='Cachorro'?'🌭':p.categoria==='Hamburguer'?'🍔':'🍕';
+  let foto = p.foto && p.foto.startsWith('data:image') ? `<img src="${p.foto}">` : `<div style="height:200px;background:#2a3a55;display:flex;align-items:center;justify-content:center;font-size:80px">${emoji}</div>`;
+  return `<div class="card-dark"><div style="position:relative">${foto}<span class="cat-tag">${p.categoria||'Pizza'}</span></div><div class="info"><h3>${p.nome}</h3><p>${p.desc||''}</p><div style="display:flex;justify-content:space-between;align-items:center"><b style="color:#f39c12;font-size:18px">${p.preco} Kz</b><button onclick="fechar();abrirProd(${idx})" style="width:auto;padding:9px 16px;margin:0">Selecionar</button></div></div></div>`;
+ }).join('');
+}
+let produtos = JSON.parse(localStorage.getItem('cafe_produtos')) || [{nome:'Pizza de Chouriço',preco:5000,foto:'',desc:'Chouriço, mozzarella, tomate, azeitonas',categoria:'Pizza',tam:{peq:0,med:4000,gra:7000}},{nome:'Pizza Margherita',preco:7500,foto:'',desc:'Molho, mozzarella, tomate',categoria:'Pizza',tam:{peq:0,med:4000,gra:7000}},{nome:'Pizza Frango',preco:9000,foto:'',desc:'Frango, milho, mozzarella',categoria:'Pizza',tam:{peq:0,med:4000,gra:7000}},{nome:'Cachorro Completo',preco:3500,foto:'',desc:'Salsicha, batata palha, maionese, ketchup',categoria:'Cachorro',tam:{peq:0,med:0,gra:0}},{nome:'Hambúrguer da Villa',preco:6000,foto:'',desc:'Carne, queijo, alface, tomate, molho da casa',categoria:'Hamburguer',tam:{peq:0,med:0,gra:0}}];
 let bebidas = JSON.parse(localStorage.getItem('cafe_bebidas')) || [{nome:'Coca-Cola',preco:700}];
 let acomps = JSON.parse(localStorage.getItem('cafe_acomps')) || [{nome:'Batata Frita',preco:1000}];
 let extras = JSON.parse(localStorage.getItem('cafe_extras')) || [{nome:'Queijo Mozzarella',preco:2000}];
 let pedidos = JSON.parse(localStorage.getItem('cafe_pedidos')) || [];
 let carrinho=[], selProd=null, selTam=0, selBeb=[], selAcomp=[], selExtras=[], editandoIndex=-1, cliquesLogo=0;
 function salvarTudo(){ try{localStorage.setItem('cafe_produtos',JSON.stringify(produtos));localStorage.setItem('cafe_bebidas',JSON.stringify(bebidas));localStorage.setItem('cafe_acomps',JSON.stringify(acomps));localStorage.setItem('cafe_extras',JSON.stringify(extras));localStorage.setItem('cafe_pedidos',JSON.stringify(pedidos));}catch(e){aviso('Erro ao salvar. Foto muito grande!');} }
-function fotoHTML(p,h){ if(p.foto && p.foto.startsWith('data:image')) return `<img src="${p.foto}" style="width:100%;height:${h}px;object-fit:cover;border-radius:10px">`; return `<div style="font-size:70px">🍕</div>`; }
+function fotoHTML(p,h){ if(p.foto && p.foto.startsWith('data:image')) return `<img src="${p.foto}" style="width:100%;height:${h}px;object-fit:cover;border-radius:10px">`; return `<div style="font-size:70px">${p.categoria==='Cachorro'?'🌭':p.categoria==='Hamburguer'?'🍔':'🍕'}</div>`; }
 function render(){ document.getElementById('menu').innerHTML=produtos.map((p,i)=>`<div class="card">${fotoHTML(p,140)}<h3>${p.nome}</h3><p>${p.desc}</p><div class="price">${p.preco} Kz</div><button onclick="abrirProd(${i})">Selecionar</button></div>`).join(''); let total=carrinho.reduce((s,x)=>s+x.total,0); document.getElementById('totalTop').innerText=total+' Kz'; let badge=document.getElementById('cartCount'); badge.innerText=carrinho.length; badge.style.display=carrinho.length?'block':'none'; }
 function abrirProd(i){selProd=produtos[i];selTam=0;selBeb=[];selAcomp=[];selExtras=[];document.getElementById('mNome').innerText=selProd.nome;document.getElementById('mDesc').innerText=selProd.desc;document.getElementById('mFoto').innerHTML=fotoHTML(selProd,200);renderOpcoes();document.getElementById('modalProd').classList.add('open');}
 function renderOpcoes(){ document.getElementById('mTamanhos').innerHTML=[['Pequena',selProd.tam.peq],['Média',selProd.tam.med],['Grande',selProd.tam.gra]].map((t,idx)=>`<div class="opt ${selTam===idx?'sel':''}" onclick="selTam=${idx};renderOpcoes()"><span>${t[0]}</span><b>${t[1]} Kz</b></div>`).join(''); const mk=(l,s,f)=>l.map((x,idx)=>`<div class="opt ${s.includes(idx)?'sel':''}" onclick="${f}(${idx})"><span>${x.nome}</span><b>${x.preco} Kz</b></div>`).join(''); document.getElementById('mBebidas').innerHTML=mk(bebidas,selBeb,'toggleBeb');document.getElementById('mAcomp').innerHTML=mk(acomps,selAcomp,'toggleAcomp');document.getElementById('mExtras').innerHTML=mk(extras,selExtras,'toggleExtra'); let total=selProd.preco+[selProd.tam.peq,selProd.tam.med,selProd.tam.gra][selTam]+selBeb.reduce((s,i)=>s+bebidas[i].preco,0)+selAcomp.reduce((s,i)=>s+acomps[i].preco,0)+selExtras.reduce((s,i)=>s+extras[i].preco,0); document.getElementById('mTotal').innerText=total+' Kz'; }
@@ -142,12 +185,12 @@ function renderRelatorio(){ let mes=document.getElementById('filtroMes').value; 
 function mudarStatus(i,status){ pedidos[i].status=status; pedidos[i].visto=false; salvarTudo(); renderRelatorio(); render(); if(status==='aprovado' && pedidos[i].fone){ let msg='Olá '+pedidos[i].nome+', o teu pedido de '+pedidos[i].total+' Kz no Café da Villa foi APROVADO! Já está a ser preparado. Obrigado!'; window.open('https://wa.me/244'+pedidos[i].fone.replace(/\s/g,'')+'?text='+encodeURIComponent(msg)); } aviso(status==='aprovado'?'✅ Pedido aprovado! O cliente vai receber o alerta.':'❌ Pedido rejeitado.'); }
 function removerFoto(){ document.getElementById('pFoto').value=''; document.getElementById('previewFoto').style.display='none'; document.getElementById('fotoInfo').innerText='Foto removida.'; }
 document.getElementById('pFotoFile').addEventListener('change', function(e){ let file=e.target.files[0]; if(!file) return; document.getElementById('fotoInfo').innerText='A comprimir... espera...'; let reader=new FileReader(); reader.onload=function(ev){ let img=new Image(); img.onload=function(){ let c=document.createElement('canvas'); let max=800; let w=img.width,h=img.height; if(w>max){h=h*max/w;w=max;} c.width=w;c.height=h; c.getContext('2d').drawImage(img,0,0,w,h); let pequeno=c.toDataURL('image/jpeg',0.7); document.getElementById('pFoto').value=pequeno; let prev=document.getElementById('previewFoto'); prev.src=pequeno; prev.style.display='block'; document.getElementById('fotoInfo').innerText='✅ Foto pronta! Clica em Atualizar Produto'; }; img.src=ev.target.result; }; reader.readAsDataURL(file); });
-function salvarProduto(){ let nome=document.getElementById('pNome').value.trim(); if(!nome) return aviso('Escreve o nome da pizza'); let novo={nome:nome,preco:+document.getElementById('pPreco').value||0,foto:document.getElementById('pFoto').value,desc:document.getElementById('pDesc').value,tam:{peq:+document.getElementById('tPeq').value||0,med:+document.getElementById('tMed').value||0,gra:+document.getElementById('tGra').value||0}}; if(editandoIndex>=0){produtos[editandoIndex]=novo; aviso('✅ Produto atualizado!');} else {produtos.push(novo); aviso('✅ Produto salvo!');} cancelarEdicao(); salvarTudo(); render(); listarAdmin(); }
-function editarProduto(i){ editandoIndex=i; let p=produtos[i]; document.getElementById('tituloForm').innerText='✏️ A EDITAR: '+p.nome; document.getElementById('pNome').value=p.nome; document.getElementById('pPreco').value=p.preco; document.getElementById('pDesc').value=p.desc; document.getElementById('pFoto').value=p.foto||''; document.getElementById('tPeq').value=p.tam.peq; document.getElementById('tMed').value=p.tam.med; document.getElementById('tGra').value=p.tam.gra; document.getElementById('btnSalvar').innerText='💾 ATUALIZAR PRODUTO'; document.getElementById('btnCancelarEdicao').style.display='block'; let prev=document.getElementById('previewFoto'); if(p.foto){prev.src=p.foto;prev.style.display='block';document.getElementById('fotoInfo').innerText='Foto atual.';} else {prev.style.display='none';document.getElementById('fotoInfo').innerText='Sem foto.';} document.querySelector('#modalAdmin .box').scrollTop=0; }
+function salvarProduto(){ let nome=document.getElementById('pNome').value.trim(); if(!nome) return aviso('Escreve o nome da pizza'); let novo={nome:nome,preco:+document.getElementById('pPreco').value||0,foto:document.getElementById('pFoto').value,desc:document.getElementById('pDesc').value,categoria:document.getElementById('pCategoria').value,tam:{peq:+document.getElementById('tPeq').value||0,med:+document.getElementById('tMed').value||0,gra:+document.getElementById('tGra').value||0}}; if(editandoIndex>=0){produtos[editandoIndex]=novo; aviso('✅ Produto atualizado!');} else {produtos.push(novo); aviso('✅ Produto salvo!');} cancelarEdicao(); salvarTudo(); render(); listarAdmin(); }
+function editarProduto(i){ editandoIndex=i; let p=produtos[i]; document.getElementById('tituloForm').innerText='✏️ A EDITAR: '+p.nome; document.getElementById('pNome').value=p.nome; document.getElementById('pPreco').value=p.preco; document.getElementById('pDesc').value=p.desc; document.getElementById('pCategoria').value=p.categoria||'Pizza'; document.getElementById('pFoto').value=p.foto||''; document.getElementById('tPeq').value=p.tam.peq; document.getElementById('tMed').value=p.tam.med; document.getElementById('tGra').value=p.tam.gra; document.getElementById('btnSalvar').innerText='💾 ATUALIZAR PRODUTO'; document.getElementById('btnCancelarEdicao').style.display='block'; let prev=document.getElementById('previewFoto'); if(p.foto){prev.src=p.foto;prev.style.display='block';document.getElementById('fotoInfo').innerText='Foto atual.';} else {prev.style.display='none';document.getElementById('fotoInfo').innerText='Sem foto.';} document.querySelector('#modalAdmin .box').scrollTop=0; }
 function cancelarEdicao(){ editandoIndex=-1; document.getElementById('tituloForm').innerText='➕ Adicionar Produto'; document.getElementById('pNome').value=''; document.getElementById('pPreco').value=''; document.getElementById('pDesc').value=''; document.getElementById('pFoto').value=''; document.getElementById('previewFoto').style.display='none'; document.getElementById('fotoInfo').innerText='Nenhuma foto ainda.'; document.getElementById('btnSalvar').innerText='✅ Salvar Produto'; document.getElementById('btnCancelarEdicao').style.display='none'; }
 function salvarBebida(){let n=document.getElementById('bNome').value; if(!n) return; bebidas.push({nome:n,preco:+document.getElementById('bPreco').value||0}); salvarTudo(); listarAdmin();}
 function salvarAcomp(){let n=document.getElementById('aNome').value; if(!n) return; acomps.push({nome:n,preco:+document.getElementById('aPreco').value||0}); salvarTudo(); listarAdmin();}
 function salvarExtra(){let n=document.getElementById('eNome').value; if(!n) return; extras.push({nome:n,preco:+document.getElementById('ePreco').value||0}); salvarTudo(); listarAdmin();}
-function listarAdmin(){ document.getElementById('listaProdutos').innerHTML=produtos.map((p,i)=>`<div class="item-admin"><span>${p.nome}</span><span><button class="edit" onclick="editarProduto(${i})">✏️ Editar</button> <button class="del" onclick="if(confirm('Apagar?')){produtos.splice(${i},1);salvarTudo();render();listarAdmin()}">🗑️</button></span></div>`).join(''); document.getElementById('listaBebidas').innerHTML=bebidas.map((b,i)=>`<div class="item-admin"><span>${b.nome}</span><button class="del" onclick="bebidas.splice(${i},1);salvarTudo();listarAdmin()">X</button></div>`).join(''); document.getElementById('listaAcomp').innerHTML=acomps.map((b,i)=>`<div class="item-admin"><span>${b.nome}</span><button class="del" onclick="acomps.splice(${i},1);salvarTudo();listarAdmin()">X</button></div>`).join(''); document.getElementById('listaExtras').innerHTML=extras.map((b,i)=>`<div class="item-admin"><span>${b.nome}</span><button class="del" onclick="extras.splice(${i},1);salvarTudo();listarAdmin()">X</button></div>`).join(''); }
+function listarAdmin(){ document.getElementById('listaProdutos').innerHTML=produtos.map((p,i)=>`<div class="item-admin"><span>${p.categoria||'Pizza'} - ${p.nome}</span><span><button class="edit" onclick="editarProduto(${i})">✏️ Editar</button> <button class="del" onclick="if(confirm('Apagar?')){produtos.splice(${i},1);salvarTudo();render();listarAdmin()}">🗑️</button></span></div>`).join(''); document.getElementById('listaBebidas').innerHTML=bebidas.map((b,i)=>`<div class="item-admin"><span>${b.nome}</span><button class="del" onclick="bebidas.splice(${i},1);salvarTudo();listarAdmin()">X</button></div>`).join(''); document.getElementById('listaAcomp').innerHTML=acomps.map((b,i)=>`<div class="item-admin"><span>${b.nome}</span><button class="del" onclick="acomps.splice(${i},1);salvarTudo();listarAdmin()">X</button></div>`).join(''); document.getElementById('listaExtras').innerHTML=extras.map((b,i)=>`<div class="item-admin"><span>${b.nome}</span><button class="del" onclick="extras.splice(${i},1);salvarTudo();listarAdmin()">X</button></div>`).join(''); }
 render();
 </script></body></html>
