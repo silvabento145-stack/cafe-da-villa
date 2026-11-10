@@ -10,7 +10,6 @@ header{background:#c0392b;color:#fff;padding:10px 12px;display:flex;justify-cont
 header h1{margin:0;font-size:22px;cursor:pointer;flex:1} header p{margin:0;font-size:11px;opacity:.9}
 .cart-top{background:#fff;color:#c0392b;border:0;padding:9px 12px;border-radius:25px;font-weight:bold;font-size:14px;cursor:pointer;width:auto;white-space:nowrap}
 .cart-badge{background:#e67e22;color:#fff;font-size:11px;padding:2px 6px;border-radius:10px;position:absolute;top:-6px;right:-6px}
-/* BOTÃO 4 BARRAS - MENU HAMBURGUER */
 .btn-menu{background:#fff !important;color:#c0392b !important;width:44px !important;height:40px !important;border-radius:10px !important;font-size:22px !important;line-height:1 !important;padding:0 !important;font-weight:bold !important}
 .hero{text-align:center;padding:15px;background:#fff}
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:12px}
@@ -37,7 +36,6 @@ label{font-weight:bold;font-size:13px;display:block;margin-top:10px}
 .stat{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0} .stat div{background:#fff;border-radius:12px;padding:12px;text-align:center;box-shadow:0 2px 6px #0001} .stat b{font-size:22px;display:block}
 .pedido-card{background:#fff;border:1px solid #eee;border-radius:12px;padding:12px;margin:8px 0}
 .badge{padding:3px 8px;border-radius:10px;font-size:12px;font-weight:bold;color:#fff} .pend{background:#f39c12} .apr{background:#2ecc71} .rej{background:#e74c3c}
-/* MENU LATERAL DO CLIENTE */
 #menuLateral{position:fixed;top:0;right:0;bottom:0;width:260px;background:#fff;z-index:60;transform:translateX(100%);transition:0.3s;box-shadow:-5px 0 20px #0003;padding:20px}
 #menuLateral.open{transform:translateX(0)}
 #menuLateral a{display:block;padding:14px 10px;border-bottom:1px solid #eee;text-decoration:none;color:#222;font-weight:bold;font-size:16px}
@@ -46,58 +44,48 @@ label{font-weight:bold;font-size:13px;display:block;margin-top:10px}
 </style>
 </head>
 <body>
+<!-- TELA PRINCIPAL: SÓ CARRINHO + 3 BARRAS - SEM PEDIDOS -->
 <header>
 <div onclick="cliqueLogo()" style="flex:1"><h1>☕ Café da Villa</h1><p>O sabor que transforma qualquer momento</p></div>
 <div style="display:flex;gap:6px;align-items:center">
-<button class="cart-top" onclick="abrirMeusPedidos()" style="position:relative">📋 Pedidos <span id="pedidoBadge" class="cart-badge" style="display:none;background:#2ecc71">!</span></button>
 <button class="cart-top" onclick="abrirCarrinho()" style="position:relative">🛒 Carrinho <span id="cartCount" class="cart-badge" style="display:none">0</span><br><span id="totalTop" style="font-size:12px">0 Kz</span></button>
-<!-- 4 BARRAS NO LADO SUPERIOR DIREITO -->
 <button class="btn-menu" onclick="abrirMenuLateral()">☰</button>
 </div>
 </header>
 
-<!-- MENU QUE ABRE QUANDO CLICA NAS 4 BARRAS -->
+<!-- MENU 3 BARRAS - SEM CARRINHO, COM PEDIDOS E CARDÁPIO -->
 <div id="menuLateral">
 <button class="fecharMenu" onclick="fecharMenuLateral()">✕</button>
 <h2 style="margin-top:40px">☕ Café da Villa</h2>
 <p style="color:#888;font-size:13px">O que queres ver?</p>
 <a href="#" onclick="fecharMenuLateral();window.scrollTo(0,0)">🏠 Início</a>
 <a href="#" onclick="fecharMenuLateral();abrirMeusPedidos()">📋 Meus Pedidos</a>
-<a href="#" onclick="fecharMenuLateral();abrirCarrinho()">🛒 Carrinho</a>
-<!-- AQUI VAMOS COLOCAR O QUE TU DISSERES DEPOIS -->
-<div style="background:#fff3e0;padding:10px;border-radius:10px;margin-top:15px;font-size:13px;color:#666;text-align:center">Aqui vamos colocar<br>o que tu vais dizer<br>depois, meu rei 👑</div>
+<a href="#" onclick="fecharMenuLateral();abrirCardapio()">📖 Nosso Cardápio</a>
 <a href="#" onclick="fecharMenuLateral();falarWhatsApp()">💬 Falar no WhatsApp</a>
+<div style="background:#fff3e0;padding:10px;border-radius:10px;margin-top:15px;font-size:13px;color:#666;text-align:center">Aqui depois tu vais me dizer<br>o que fazer no Cardápio 👑</div>
 </div>
 <div id="fundoMenu" onclick="fecharMenuLateral()" style="position:fixed;inset:0;background:#0005;z-index:55;display:none"></div>
 
 <div class="hero"><h2>Cada Fatia, Uma Delícia</h2><p>Ingredientes frescos • Entrega rápida em Luanda</p></div>
 <div id="menu" class="grid"></div>
-<div style="text-align:center;padding:20px;color:#999;font-size:12px">Café da Villa • Luanda • Clica em Pedidos para ver o estado</div>
+<div style="text-align:center;padding:20px;color:#999;font-size:12px">Café da Villa • Luanda</div>
 <div id="toast"><div id="toastMsg"></div><button onclick="fecharToast()">OK</button></div>
 
 <div id="modalProd" class="modal"><div class="box"><button class="btn-x-vermelho" onclick="fechar()">✕</button><div id="mFoto"></div><h2 id="mNome"></h2><p id="mDesc"></p><label>TAMANHO</label><div id="mTamanhos"></div><label>🥤 BEBIDAS</label><div id="mBebidas"></div><label>🍟 ACOMPANHAMENTOS</label><div id="mAcomp"></div><label>🧀 EXTRAS</label><div id="mExtras"></div><h3>Total: <span id="mTotal"></span></h3><button onclick="addCarrinho()">Adicionar ao Carrinho</button></div></div>
 <div id="modalCarrinho" class="modal"><div class="box"><button class="btn-x-vermelho" onclick="fechar()">✕</button><h2>🛒 Teu Carrinho</h2><div id="listaCarrinho"></div><h3 id="totalCarrinho"></h3><label>Teu Nome</label><input id="clienteNome" placeholder="Ex: Silva Bento"><label>Teu WhatsApp</label><input id="clienteFone" placeholder="Ex: 923000000"><button onclick="fazerPedido()">✅ Fazer Pedido</button></div></div>
 <div id="modalMeusPedidos" class="modal"><div class="box"><button class="btn-x-vermelho" onclick="fechar()">✕</button><h2>📋 Meus Pedidos</h2><div id="listaMeusPedidos"></div></div></div>
 
-<!-- ADMIN -->
+<!-- MODAL NOSSO CARDÁPIO -->
+<div id="modalCardapio" class="modal"><div class="box"><button class="btn-x-vermelho" onclick="fechar()">✕</button><h2>📖 Nosso Cardápio</h2><p style="color:#666;font-size:14px">Aqui vai ficar o nosso cardápio completo. Depois o chefe vai dizer o que fazer aqui.</p><div id="listaCardapio"></div></div></div>
+
 <div id="modalAdmin" class="modal"><div class="box">
 <button class="btn-x-vermelho" onclick="voltarCliente()">✕</button>
 <h2 style="padding-right:45px">Admin Café da Villa</h2>
 <div id="loginAdmin"><input id="senha" type="password" placeholder="Senha: 1234"><button onclick="login()">Entrar</button></div>
 <div id="painelAdmin" style="display:none">
 <div class="tabs"><button class="tab ativo" id="tabProdBtn" onclick="mostrarAba('prod')">🍕 ÁREA PRODUTOS</button><button class="tab" id="tabPedBtn" onclick="mostrarAba('ped')">📊 ÁREA PEDIDOS / RELATÓRIO</button></div>
-
 <div id="abaProd">
-<!-- TROCAR NÚMERO WHATSAPP NO ADMIN -->
-<div class="config-whats">
-<h3 style="margin:0">📲 Número do WhatsApp da Loja</h3>
-<p style="font-size:12px;color:#666">Aqui tu trocas o número quando quiseres. Os pedidos e aprovações vão para este número.</p>
-<label>Ex: 923000000 (sem +244)</label>
-<input id="numeroWhats" placeholder="923000000">
-<button onclick="salvarWhats()" style="background:#2ecc71">💾 Salvar Número do WhatsApp</button>
-<p id="whatsAtual" style="font-size:13px;color:#2ecc71;font-weight:bold"></p>
-</div>
-
+<div class="config-whats"><h3 style="margin:0">📲 Número do WhatsApp da Loja</h3><p style="font-size:12px;color:#666">Aqui tu trocas o número quando quiseres.</p><label>Ex: 923000000 (sem +244)</label><input id="numeroWhats" placeholder="923000000"><button onclick="salvarWhats()" style="background:#2ecc71">💾 Salvar Número do WhatsApp</button><p id="whatsAtual" style="font-size:13px;color:#2ecc71;font-weight:bold"></p></div>
 <h3 id="tituloForm">➕ Adicionar Produto</h3>
 <input id="pNome" placeholder="Nome ex: Pizza de Chouriço"><input id="pPreco" type="number" placeholder="Preço ex: 5000"><input id="pDesc" placeholder="Ingredientes">
 <label>📸 FOTO DO PRODUTO</label><div class="foto-box"><img id="previewFoto"><p id="fotoInfo" style="font-size:13px;color:#666">Nenhuma foto ainda.</p><input id="pFotoFile" type="file" accept="image/*" style="display:none"><button type="button" class="btn-foto" onclick="document.getElementById('pFotoFile').click()">📸 TROCAR FOTO / TIRAR FOTO</button><button type="button" class="btn-remover" onclick="removerFoto()">🗑️ REMOVER FOTO ATUAL</button></div><input id="pFoto" type="hidden">
@@ -124,6 +112,8 @@ function fecharMenuLateral(){ document.getElementById('menuLateral').classList.r
 function falarWhatsApp(){ let n=getWhats(); window.open('https://wa.me/244'+n+'?text='+encodeURIComponent('Olá Café da Villa, quero fazer um pedido!')); }
 function getWhats(){ return localStorage.getItem('cafe_whats') || '923000000'; }
 function salvarWhats(){ let n=document.getElementById('numeroWhats').value.replace(/\D/g,''); if(n.length<9) return aviso('Escreve um número válido, ex: 923000000'); localStorage.setItem('cafe_whats',n); document.getElementById('whatsAtual').innerText='✅ Número atual: +244 '+n; aviso('✅ Número do WhatsApp atualizado para +244 '+n); }
+// NOSSO CARDÁPIO - POR ENQUANTO MOSTRA OS PRODUTOS, DEPOIS TU DIZES O QUE FAZER
+function abrirCardapio(){ document.getElementById('listaCardapio').innerHTML=produtos.map(p=>`<div style="display:flex;justify-content:space-between;padding:12px;background:#f8f8f8;border-radius:10px;margin:6px 0"><div><b>${p.nome}</b><br><span style="font-size:13px;color:#666">${p.desc}</span></div><b style="color:#e67e22">${p.preco} Kz</b></div>`).join('') || '<p>Ainda sem produtos.</p>'; document.getElementById('modalCardapio').classList.add('open'); }
 let produtos = JSON.parse(localStorage.getItem('cafe_produtos')) || [{nome:'Pizza de Chouriço',preco:5000,foto:'',desc:'Chouriço, mozzarella, tomate, azeitonas',tam:{peq:0,med:4000,gra:7000}},{nome:'Pizza Margherita',preco:7500,foto:'',desc:'Molho, mozzarella, tomate',tam:{peq:0,med:4000,gra:7000}},{nome:'Pizza Frango',preco:9000,foto:'',desc:'Frango, milho, mozzarella',tam:{peq:0,med:4000,gra:7000}}];
 let bebidas = JSON.parse(localStorage.getItem('cafe_bebidas')) || [{nome:'Coca-Cola',preco:700}];
 let acomps = JSON.parse(localStorage.getItem('cafe_acomps')) || [{nome:'Batata Frita',preco:1000}];
@@ -132,7 +122,7 @@ let pedidos = JSON.parse(localStorage.getItem('cafe_pedidos')) || [];
 let carrinho=[], selProd=null, selTam=0, selBeb=[], selAcomp=[], selExtras=[], editandoIndex=-1, cliquesLogo=0;
 function salvarTudo(){ try{localStorage.setItem('cafe_produtos',JSON.stringify(produtos));localStorage.setItem('cafe_bebidas',JSON.stringify(bebidas));localStorage.setItem('cafe_acomps',JSON.stringify(acomps));localStorage.setItem('cafe_extras',JSON.stringify(extras));localStorage.setItem('cafe_pedidos',JSON.stringify(pedidos));}catch(e){aviso('Erro ao salvar. Foto muito grande!');} }
 function fotoHTML(p,h){ if(p.foto && p.foto.startsWith('data:image')) return `<img src="${p.foto}" style="width:100%;height:${h}px;object-fit:cover;border-radius:10px">`; return `<div style="font-size:70px">🍕</div>`; }
-function render(){ document.getElementById('menu').innerHTML=produtos.map((p,i)=>`<div class="card">${fotoHTML(p,140)}<h3>${p.nome}</h3><p>${p.desc}</p><div class="price">${p.preco} Kz</div><button onclick="abrirProd(${i})">Selecionar</button></div>`).join(''); let total=carrinho.reduce((s,x)=>s+x.total,0); document.getElementById('totalTop').innerText=total+' Kz'; let badge=document.getElementById('cartCount'); badge.innerText=carrinho.length; badge.style.display=carrinho.length?'block':'none'; let aprovados=pedidos.filter(p=>p.status==='aprovado' && !p.visto).length; let b2=document.getElementById('pedidoBadge'); if(b2) b2.style.display=aprovados?'block':'none'; }
+function render(){ document.getElementById('menu').innerHTML=produtos.map((p,i)=>`<div class="card">${fotoHTML(p,140)}<h3>${p.nome}</h3><p>${p.desc}</p><div class="price">${p.preco} Kz</div><button onclick="abrirProd(${i})">Selecionar</button></div>`).join(''); let total=carrinho.reduce((s,x)=>s+x.total,0); document.getElementById('totalTop').innerText=total+' Kz'; let badge=document.getElementById('cartCount'); badge.innerText=carrinho.length; badge.style.display=carrinho.length?'block':'none'; }
 function abrirProd(i){selProd=produtos[i];selTam=0;selBeb=[];selAcomp=[];selExtras=[];document.getElementById('mNome').innerText=selProd.nome;document.getElementById('mDesc').innerText=selProd.desc;document.getElementById('mFoto').innerHTML=fotoHTML(selProd,200);renderOpcoes();document.getElementById('modalProd').classList.add('open');}
 function renderOpcoes(){ document.getElementById('mTamanhos').innerHTML=[['Pequena',selProd.tam.peq],['Média',selProd.tam.med],['Grande',selProd.tam.gra]].map((t,idx)=>`<div class="opt ${selTam===idx?'sel':''}" onclick="selTam=${idx};renderOpcoes()"><span>${t[0]}</span><b>${t[1]} Kz</b></div>`).join(''); const mk=(l,s,f)=>l.map((x,idx)=>`<div class="opt ${s.includes(idx)?'sel':''}" onclick="${f}(${idx})"><span>${x.nome}</span><b>${x.preco} Kz</b></div>`).join(''); document.getElementById('mBebidas').innerHTML=mk(bebidas,selBeb,'toggleBeb');document.getElementById('mAcomp').innerHTML=mk(acomps,selAcomp,'toggleAcomp');document.getElementById('mExtras').innerHTML=mk(extras,selExtras,'toggleExtra'); let total=selProd.preco+[selProd.tam.peq,selProd.tam.med,selProd.tam.gra][selTam]+selBeb.reduce((s,i)=>s+bebidas[i].preco,0)+selAcomp.reduce((s,i)=>s+acomps[i].preco,0)+selExtras.reduce((s,i)=>s+extras[i].preco,0); document.getElementById('mTotal').innerText=total+' Kz'; }
 function toggleBeb(i){selBeb=selBeb.includes(i)?selBeb.filter(x=>x!==i):[...selBeb,i];renderOpcoes()}
@@ -140,7 +130,7 @@ function toggleAcomp(i){selAcomp=selAcomp.includes(i)?selAcomp.filter(x=>x!==i):
 function toggleExtra(i){selExtras=selExtras.includes(i)?selExtras.filter(x=>x!==i):[...selExtras,i];renderOpcoes()}
 function addCarrinho(){let total=selProd.preco+[selProd.tam.peq,selProd.tam.med,selProd.tam.gra][selTam]+selBeb.reduce((s,i)=>s+bebidas[i].preco,0)+selAcomp.reduce((s,i)=>s+acomps[i].preco,0)+selExtras.reduce((s,i)=>s+extras[i].preco,0); let tamNome=['Pequena','Média','Grande'][selTam]; let detalhe=selProd.nome+' ('+tamNome+')'+(selBeb.length?' + '+selBeb.map(i=>bebidas[i].nome).join(', '):'')+(selAcomp.length?' + '+selAcomp.map(i=>acomps[i].nome).join(', '):'')+(selExtras.length?' + '+selExtras.map(i=>extras[i].nome).join(', '):''); carrinho.push({nome:detalhe,total});fechar();render(); aviso('Adicionado ao carrinho!');}
 function abrirCarrinho(){ if(!carrinho.length){ aviso('Carrinho vazio. Escolhe uma pizza primeiro!'); return; } document.getElementById('listaCarrinho').innerHTML=carrinho.map((c,i)=>`<div style="display:flex;justify-content:space-between;padding:10px;background:#f8f8f8;border-radius:8px;margin:5px 0"><span>${c.nome}</span><b>${c.total} Kz <button class="del" onclick="carrinho.splice(${i},1);render();abrirCarrinho()">X</button></b></div>`).join(''); document.getElementById('totalCarrinho').innerText='Total: '+carrinho.reduce((s,x)=>s+x.total,0)+' Kz'; document.getElementById('modalCarrinho').classList.add('open'); }
-function fazerPedido(){ let nome=document.getElementById('clienteNome').value.trim(); if(!nome) return aviso('Escreve o teu nome para fazer o pedido'); let total=carrinho.reduce((s,x)=>s+x.total,0); let novoPedido={id:Date.now(), nome:nome, fone:document.getElementById('clienteFone').value, itens:carrinho.map(c=>c.nome).join(' | '), total:total, status:'pendente', visto:false, data:new Date().toISOString()}; pedidos.unshift(novoPedido); salvarTudo(); carrinho=[]; render(); fechar(); aviso('✅ Pedido enviado!<br><br>Espera aprovação. Quando o Café da Villa aprovar, vais receber um alerta em <b>📋 Pedidos</b>.'); }
+function fazerPedido(){ let nome=document.getElementById('clienteNome').value.trim(); if(!nome) return aviso('Escreve o teu nome para fazer o pedido'); let total=carrinho.reduce((s,x)=>s+x.total,0); let novoPedido={id:Date.now(), nome:nome, fone:document.getElementById('clienteFone').value, itens:carrinho.map(c=>c.nome).join(' | '), total:total, status:'pendente', visto:false, data:new Date().toISOString()}; pedidos.unshift(novoPedido); salvarTudo(); carrinho=[]; render(); fechar(); aviso('✅ Pedido enviado!<br><br>Espera aprovação. Quando for aprovado vais receber alerta.'); }
 function abrirMeusPedidos(){ if(!pedidos.length){ aviso('Ainda não tens pedidos. Faz o teu primeiro pedido!'); return; } document.getElementById('listaMeusPedidos').innerHTML=pedidos.map(p=>{ let cls=p.status==='aprovado'?'apr':p.status==='rejeitado'?'rej':'pend'; let txt=p.status==='aprovado'?'✅ APROVADO':p.status==='rejeitado'?'❌ REJEITADO':'⏳ A ESPERAR APROVAÇÃO'; return `<div class="pedido-card"><div style="display:flex;justify-content:space-between"><b>Pedido #${String(p.id).slice(-4)}</b><span class="badge ${cls}">${txt}</span></div><p style="font-size:13px;color:#666">${new Date(p.data).toLocaleString('pt-PT')}<br>${p.itens}</p><b>Total: ${p.total} Kz</b></div>`; }).join(''); let novo=pedidos.find(p=>p.status==='aprovado' && !p.visto); if(novo){ setTimeout(()=>aviso('🎉 <b>Pedido Aprovado!</b><br><br>O Café da Villa aprovou o teu pedido de '+novo.total+' Kz. Já está a ser preparado!'),300); pedidos.forEach(p=>p.visto=true); salvarTudo(); } document.getElementById('modalMeusPedidos').classList.add('open'); render(); }
 function fechar(){document.querySelectorAll('.modal').forEach(m=>m.classList.remove('open'))}
 function voltarCliente(){ fechar(); document.getElementById('senha').value=''; document.getElementById('loginAdmin').style.display='block'; document.getElementById('painelAdmin').style.display='none'; window.scrollTo(0,0); }
